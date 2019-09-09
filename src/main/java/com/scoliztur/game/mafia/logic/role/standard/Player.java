@@ -9,12 +9,16 @@ import lombok.Setter;
 public abstract class Player {
 
     private boolean isAlive;
+    private String name;
 
     public Player() {
         this.isAlive = true;
     }
 
     public void vote(OfferedForKilling offerPlayer) {
-        offerPlayer.takeVote();
+
     }
+
+    public abstract String getName();
+
 }

@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class NewGame {
 
-    private PrepareGame prepareGame = new PrepareGame();
+    private PrepareGame prepareGame;
 
     public void start() {
-        prepareGame.allRoles.toString();
+
+        prepareGame = new PrepareGame();
 
         Mafia mafia = new Mafia();
         Sheriff sheriff = new Sheriff();
