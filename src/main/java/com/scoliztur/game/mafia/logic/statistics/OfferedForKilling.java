@@ -1,6 +1,6 @@
 package com.scoliztur.game.mafia.logic.statistics;
 
-import com.scoliztur.game.mafia.logic.role.standard.Player;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

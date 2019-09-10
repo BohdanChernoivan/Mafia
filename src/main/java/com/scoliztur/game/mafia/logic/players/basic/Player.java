@@ -1,4 +1,4 @@
-package com.scoliztur.game.mafia.logic.role.standard;
+package com.scoliztur.game.mafia.logic.players.basic;
 
 import com.scoliztur.game.mafia.logic.statistics.OfferedForKilling;
 import lombok.Getter;
@@ -8,11 +8,19 @@ import lombok.Setter;
 @Setter
 public abstract class Player {
 
-    private boolean isAlive;
     private String name;
+    private boolean isActionDay;
+    private boolean isActionNight;
+    private boolean isAlive;
 
     public Player() {
         this.isAlive = true;
+    }
+
+    public void pick(Player player, OfferedForKilling offered) {
+        if(this.isActionDay) {
+            offered.addPlayer(player);
+        }
     }
 
     public void vote(OfferedForKilling offerPlayer) {

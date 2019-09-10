@@ -1,7 +1,7 @@
 package com.scoliztur.game.mafia.services;
 
 import com.scoliztur.game.mafia.logic.Roles;
-import com.scoliztur.game.mafia.logic.role.standard.Player;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 import org.springframework.stereotype.Service;
 
 @Service

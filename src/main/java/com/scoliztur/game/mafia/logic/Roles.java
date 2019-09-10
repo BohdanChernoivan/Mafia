@@ -1,7 +1,7 @@
 package com.scoliztur.game.mafia.logic;
 
 
-import com.scoliztur.game.mafia.logic.role.standard.Player;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 
 import java.util.ArrayList;
 import java.util.List;
