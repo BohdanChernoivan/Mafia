@@ -1,6 +1,6 @@
 package com.scoliztur.game.mafia.entity;
 
-import com.scoliztur.game.mafia.logic.role.standard.Player;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -29,7 +29,7 @@ public class Room {
     @Column(name = "roles")
     private List<Player> roles;
 
-    @Column(name = "players")
-    private int players;
+    @Column(name = "max_size_players")
+    private int maxSizePlayers;
 
 }
