@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.logic.players.basic.Player;
 
 public class Sheriff extends Player {
 
+
     public String findMafia(Player player, boolean day) {
 
         if(this.isActionNight() && !day) {
@@ -15,6 +16,7 @@ public class Sheriff extends Player {
         return getName() + " not found Mafia";
 
     }
+
 
     @Override
     public String getName() {

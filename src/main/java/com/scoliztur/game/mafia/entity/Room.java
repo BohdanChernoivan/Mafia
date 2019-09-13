@@ -26,10 +26,11 @@ public class Room {
     @Column(name = "room_id", unique = true)
     private UUID roomID;
 
+    @Transient
     @Column(name = "roles")
     private List<Player> roles;
 
-    @Column(name = "max_size_players")
+    @Column(name = "max_size_players", length = 15)
     private int maxSizePlayers;
 
 }

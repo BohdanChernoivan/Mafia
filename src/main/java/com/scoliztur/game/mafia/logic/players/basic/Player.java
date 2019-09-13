@@ -14,6 +14,8 @@ public abstract class Player {
     private boolean isAlive;
 
     public Player() {
+        this.isActionDay = true;
+        this.isActionNight = true;
         this.isAlive = true;
     }
 

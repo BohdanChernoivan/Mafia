@@ -1,23 +1,28 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.Room;
+import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 import com.scoliztur.game.mafia.services.PrepareGame;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/players")
 public class RolesController {
 
     private final PrepareGame prepareGame;
-    private final Room room;
+    private final RoomRepositories roomRepositories;
 
 
-    public RolesController(PrepareGame prepareGame, Room room) {
+    public RolesController(PrepareGame prepareGame, RoomRepositories roomRepositories) {
         this.prepareGame = prepareGame;
-        this.room = room;
+        this.roomRepositories = roomRepositories;
     }
 
     @GetMapping("/add/Don")
@@ -65,7 +70,7 @@ public class RolesController {
         return "Added " + barman.getName();
     }
 
-    @GetMapping("/add/Sheriff")
+    @GetMapping("/add/Doctor")
     public String addDoctor() {
 
         Doctor doctor = new Doctor();
@@ -81,5 +86,17 @@ public class RolesController {
         prepareGame.addRole(civilian);
 
         return "Added " + civilian.getName();
+    }
+
+    private void addPlayersInRoom(Player player, Room roomClone) {
+
+        if(!roomRepositories.existsById(roomClone.getRoomID())) {
+            List<Player> players = new ArrayList<>(roomClone.getRoles());
+            int max = roomClone.getMaxSizePlayers();
+            players.add(player);
+            roomClone.setMaxSizePlayers(max + 1);
+            roomClone.setRoles(players);
+            roomRepositories.save(roomClone);
+        }
     }
 }
