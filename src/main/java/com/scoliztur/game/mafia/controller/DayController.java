@@ -1,10 +1,16 @@
 package com.scoliztur.game.mafia.controller;
 
-import com.scoliztur.game.mafia.services.PrepareGame;
+import com.scoliztur.game.mafia.services.Game;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(PrepareGame.GAME_LINK + "/change")
+@RequestMapping("mafia/change")
 public class DayController {
+
+    private final Game game;
+
+    public DayController(Game game) {
+        this.game = game;
+    }
 }

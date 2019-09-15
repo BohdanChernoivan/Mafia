@@ -1,11 +1,16 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.Room;
+import com.scoliztur.game.mafia.entity.User;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
-import com.scoliztur.game.mafia.services.PrepareGame;
+import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
+import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
+import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
+import com.scoliztur.game.mafia.services.Game;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,90 +18,96 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping("mafia/players")
 public class RolesController {
 
-    private final PrepareGame prepareGame;
+    private final Game game;
     private final RoomRepositories roomRepositories;
 
-
-    public RolesController(PrepareGame prepareGame, RoomRepositories roomRepositories) {
-        this.prepareGame = prepareGame;
+    public RolesController(Game game, RoomRepositories roomRepositories) {
+        this.game = game;
         this.roomRepositories = roomRepositories;
     }
 
     @GetMapping("/add/Don")
-    public String addDon() {
+    public String addDon(@RequestBody Room room) {
 
-        Don don = new Don();
-        prepareGame.addRole(don);
+        BlackPlayers blackPlayers = BlackPlayers.DON;
 
-        return "Added " + don.getName();
+        roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
+
+        return "Added " + blackPlayers.getBlackPlayer();
     }
 
     @GetMapping("/add/Mafia")
-    public String addMafia() {
+    public String addMafia(@RequestBody Room room) {
 
-        Mafia mafia = new Mafia();
-        prepareGame.addRole(mafia);
+        BlackPlayers blackPlayers = BlackPlayers.MAFIA;
 
-        return "Added " + mafia.getName();
+        roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
+
+        return "Added " +  blackPlayers.getBlackPlayer();
     }
 
     @GetMapping("/add/Courtesan")
-    public String addCourtesan() {
+    public String addCourtesan(@RequestBody Room room) {
 
-        Courtesan courtesan = new Courtesan();
-        prepareGame.addRole(courtesan);
+        BlackPlayers blackPlayers = BlackPlayers.COURTESAN;
 
-        return "Added " + courtesan.getName();
+        roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
+
+        return "Added " +  blackPlayers.getBlackPlayer();
     }
 
     @GetMapping("/add/Sheriff")
-    public String addSheriff() {
+    public String addSheriff(@RequestBody Room room) {
 
-        Sheriff sheriff = new Sheriff();
-        prepareGame.addRole(sheriff);
+        RedPlayers redPlayers = RedPlayers.SHERIFF;
 
-        return "Added " + sheriff.getName();
+        roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
+
+        return "Added " + redPlayers.getRedPlayer();
     }
 
     @GetMapping("/add/Barman")
-    public String addBarman() {
+    public String addBarman(@RequestBody Room room) {
 
-        Barman barman = new Barman();
-        prepareGame.addRole(barman);
+        RedPlayers redPlayers = RedPlayers.BARMAN;
 
-        return "Added " + barman.getName();
+        roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
+
+        return "Added " + redPlayers.getRedPlayer();
     }
 
     @GetMapping("/add/Doctor")
-    public String addDoctor() {
+    public String addDoctor(@RequestBody Room room) {
 
-        Doctor doctor = new Doctor();
-        prepareGame.addRole(doctor);
+        RedPlayers redPlayers = RedPlayers.DOCTOR;
 
-        return "Added " + doctor.getName();
+        roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
+
+        return "Added " + redPlayers.getRedPlayer();
     }
 
     @GetMapping("/add/Civilian")
-    public String addCivilian() {
+    public String addCivilian(@RequestBody Room room) {
 
-        Civilian civilian = new Civilian();
-        prepareGame.addRole(civilian);
+        RedPlayers redPlayers = RedPlayers.CIVILIAN;
 
-        return "Added " + civilian.getName();
+        roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
+
+        return "Added " + redPlayers.getRedPlayer();
     }
 
     private void addPlayersInRoom(Player player, Room roomClone) {
-
-        if(!roomRepositories.existsById(roomClone.getRoomID())) {
-            List<Player> players = new ArrayList<>(roomClone.getRoles());
-            int max = roomClone.getMaxSizePlayers();
-            players.add(player);
-            roomClone.setMaxSizePlayers(max + 1);
-            roomClone.setRoles(players);
-            roomRepositories.save(roomClone);
-        }
+//
+//        if(!roomRepositories.existsById(roomClone.getId())) {
+//            List<Player> players = new ArrayList<>(roomClone.getRoles());
+//            int max = roomClone.getMaxSizePlayers();
+//            players.add(player);
+//            roomClone.setMaxSizePlayers(max + 1);
+//            roomClone.setRoles(players);
+//            roomRepositories.save(roomClone);
+//        }
     }
 }

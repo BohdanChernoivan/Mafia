@@ -9,32 +9,32 @@ public class RolePlayerFactory implements CreatorPlayer{
 
 
     @Override
-    public Player createRedPlayer(RedPlayers redPlayer) {
+    public Player createRedPlayer(RedPlayers redPlayer, String name) {
 
         switch (redPlayer) {
             case SHERIFF:
-                return new Sheriff();
+                return new Sheriff(name);
             case BARMAN:
-                return new Barman();
+                return new Barman(name);
             case CIVILIAN:
-                return new Civilian();
+                return new Civilian(name);
             case DOCTOR:
-                return new Doctor();
+                return new Doctor(name);
                 default:
                     return null;
         }
     }
 
     @Override
-    public Player createBlackPlayer(BlackPlayers blackPlayer) {
+    public Player createBlackPlayer(BlackPlayers blackPlayer, String name) {
 
         switch (blackPlayer) {
             case DON:
-                return new Don();
+                return new Don(name);
             case MAFIA:
-                return new Mafia();
+                return new Mafia(name);
             case COURTESAN:
-                return new Courtesan();
+                return new Courtesan(name);
                 default:
                     return null;
         }

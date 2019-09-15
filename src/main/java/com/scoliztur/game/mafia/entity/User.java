@@ -1,11 +1,11 @@
 package com.scoliztur.game.mafia.entity;
 
+import com.scoliztur.game.mafia.entity.model.BaseEntity;
+import com.scoliztur.game.mafia.entity.model.Role;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -14,31 +14,22 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-public class User {
+@EqualsAndHashCode(callSuper = false)
+public class User extends BaseEntity {
 
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "user_id", unique = true)
-    private UUID userId;
+    @Column(name = "username", nullable = false, unique = true, length = 30)
+    private String username;
 
-    @Column(name = "nickname")
-    private String nickname;
-
-    @Column(name = "email")
-    private String email;
-
-    @Transient
-    @NonNull
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "password")
-    private int hashPassword;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
 
-    private void doPassword() {
-        hashPassword = this.password.hashCode();
-    }
-
+    @ManyToOne(targetEntity = Room.class)
+    @JoinColumn(name = "roomId")
+    private Room roomUser;
 }
