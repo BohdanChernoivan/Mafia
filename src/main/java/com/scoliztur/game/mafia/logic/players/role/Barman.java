@@ -15,21 +15,27 @@ public class Barman extends Player {
     public String poison(Player player, boolean day) {
 
         if(this.isActionNight() && !day) {
+            getAwayFromPlayer();
             victim = player;
             player.setActionNight(false);
             return player.getName() + " poisoned";
-        } else if (!checkOwnActivity(day)) {
+        } else if (!checkOwnActivity()) {
+            getAwayFromPlayer();
             return toString() + " is not active";
+        } else if (day) {
+            return "Now day";
         }
         return null;
     }
 
-    public void getAwayFromPlayer() {
-        victim.setActionNight(true);
+    private void getAwayFromPlayer() {
+        if(victim != null) {
+            victim.setActionNight(true);
+        }
     }
 
     @Override
     public String toString() {
-        return RedPlayers.BARMAN.getRedPlayer();
+        return RedPlayers.BARMAN.getNameRole();
     }
 }

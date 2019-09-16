@@ -26,7 +26,13 @@ class DonTest {
 
     @Test
     void findMafiaDay() {
-        assertEquals(don.findSheriff(sheriff, true), don.toString() + " is not active");
+        assertEquals(don.findSheriff(sheriff, true), "Now day");
+    }
+
+    @Test
+    void findMafiaBeingNotActiveNight() {
+        don.setActionNight(false);
+        assertEquals(don.findSheriff(sheriff, false), don.toString() + " is not active");
     }
 
     @Test
@@ -35,7 +41,7 @@ class DonTest {
     }
 
     @Test
-    void toString1() {
-        assertEquals(don.toString(), BlackPlayers.DON.getBlackPlayer());
+    void getName() {
+        assertEquals(don.toString(), BlackPlayers.DON.getNameRole());
     }
 }

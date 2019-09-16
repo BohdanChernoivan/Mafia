@@ -7,13 +7,13 @@ public enum RedPlayers {
     CIVILIAN("Civilian"),
     DOCTOR("Doctor");
 
-    private String redPlayer;
+    private String nameRole;
 
-    RedPlayers(String redPlayer) {
-        this.redPlayer = redPlayer;
+    RedPlayers(String nameRole) {
+        this.nameRole = nameRole;
     }
 
-    public String getRedPlayer() {
-        return redPlayer;
+    public String getNameRole() {
+        return nameRole;
     }
 }

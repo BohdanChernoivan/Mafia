@@ -15,21 +15,27 @@ public class Courtesan extends Player {
     public String confuse(Player player, boolean day) {
 
         if(this.isActionNight() && !day) {
+            getAwayFromPlayer();
             victim = player;
             player.setActionDay(false);
             return player.getName() + " confused";
-        } else if(!checkOwnActivity(day)) {
+        } else if(!checkOwnActivity()) {
+            getAwayFromPlayer();
             return toString() + " is not active";
+        } else if (day) {
+            return "Now day";
         }
         return null;
     }
 
-    public void getAwayFromPlayer() {
-        victim.setActionDay(true);
+    private void getAwayFromPlayer() {
+        if(victim != null) {
+            victim.setActionDay(true);
+        }
     }
 
     @Override
     public String toString() {
-        return BlackPlayers.COURTESAN.getBlackPlayer();
+        return BlackPlayers.COURTESAN.getNameRole();
     }
 }

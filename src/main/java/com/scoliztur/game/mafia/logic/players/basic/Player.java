@@ -22,29 +22,31 @@ public abstract class Player {
         this.isAlive = true;
     }
 
-    public void pick(Player player, OfferForKilling offered) {
-        if(this.isActionDay) {
-            offered.addPlayer(player);
+    public void pick(OfferForKilling offered, Player player, boolean day) {
+        if(day) {
+            if (this.isActionDay) {
+                offered.addPlayer(player);
+            }
         }
     }
 
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
 
         if(day) {
-            for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayersList().entrySet()) {
-                if (entry.getKey().getName().equals(player.getName())) {
+            for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerByteMap().entrySet()) {
+                if (entry.getKey() == player) {
                     entry.setValue((byte) (entry.getValue() + 1));
                     return this.getName() + " voted for " + entry.getKey().getName();
                 }
-                return "There is no such player";
             }
-            return "No list of offered players";
+            return "There is no such player";
+//            return "No list of offered players";
         } else
             return "Now is not day";
     }
 
-    public boolean checkOwnActivity(boolean day) {
+    public boolean checkOwnActivity() {
 
-        return this.isActionNight() && this.isAlive() && !day;
+        return this.isActionNight() && this.isAlive();
     }
 }

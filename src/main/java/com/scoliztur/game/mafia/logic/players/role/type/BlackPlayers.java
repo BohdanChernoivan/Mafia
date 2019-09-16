@@ -6,13 +6,13 @@ public enum BlackPlayers {
     MAFIA("Mafia"),
     COURTESAN("Courtesan");
 
-    private String blackPlayer;
+    private String nameRole;
 
-    BlackPlayers(String blackPlayer) {
-        this.blackPlayer = blackPlayer;
+    BlackPlayers(String nameRole) {
+        this.nameRole = nameRole;
     }
 
-    public String getBlackPlayer() {
-        return blackPlayer;
+    public String getNameRole() {
+        return nameRole;
     }
 }

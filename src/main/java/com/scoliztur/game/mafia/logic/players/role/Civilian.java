@@ -11,6 +11,6 @@ public class Civilian extends Player {
 
     @Override
     public String toString() {
-        return RedPlayers.CIVILIAN.getRedPlayer();
+        return RedPlayers.CIVILIAN.getNameRole();
     }
 }

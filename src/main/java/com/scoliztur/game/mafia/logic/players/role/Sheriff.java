@@ -13,13 +13,15 @@ public class Sheriff extends Player {
     public String findMafia(Player player, boolean day) {
 
         if(this.isActionNight() && !day) {
-            if(player.toString().equals(BlackPlayers.MAFIA.getBlackPlayer()) ||
-                    player.toString().equals(BlackPlayers.DON.getBlackPlayer()) ||
-                    player.toString().equals(BlackPlayers.COURTESAN.getBlackPlayer())) {
+            if(player.toString().equals(BlackPlayers.MAFIA.getNameRole()) ||
+                    player.toString().equals(BlackPlayers.DON.getNameRole()) ||
+                    player.toString().equals(BlackPlayers.COURTESAN.getNameRole())) {
                 return this.toString() + " found Mafia";
             } else return this.toString() + " not found Mafia";
-        } else if (!checkOwnActivity(day)) {
+        } else if (!checkOwnActivity()) {
             return this.toString() + " is not active";
+        } else if (day) {
+            return "Now day";
         }
         return getName() + " not found Mafia";
     }
@@ -27,6 +29,6 @@ public class Sheriff extends Player {
 
     @Override
     public String toString() {
-        return RedPlayers.SHERIFF.getRedPlayer();
+        return RedPlayers.SHERIFF.getNameRole();
     }
 }

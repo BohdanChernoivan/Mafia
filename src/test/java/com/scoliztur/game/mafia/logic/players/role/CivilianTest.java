@@ -19,24 +19,32 @@ class CivilianTest {
         civilian = new Civilian("Lola");
     }
 
-    @Test
-    void toString1() {
-        assertEquals(civilian.toString(), RedPlayers.CIVILIAN.getRedPlayer());
-    }
 
     @Test
     void checkOwnActivity() {
-        assertTrue(civilian.checkOwnActivity(false));
-    }
-
-    @Test
-    void checkOwnActivityDay() {
-        assertFalse(civilian.checkOwnActivity(true));
+        assertTrue(civilian.checkOwnActivity());
     }
 
     @Test
     void checkOwnActivityFalseAlive() {
         civilian.setAlive(false);
-        assertFalse(civilian.checkOwnActivity(false));
+        assertFalse(civilian.checkOwnActivity());
+    }
+
+    @Test
+    void checkOwnActivityNotActiveNight() {
+        civilian.setActionNight(false);
+        assertFalse(civilian.checkOwnActivity());
+    }
+
+    @Test
+    void checkOwnActivityNotActiveDay() {
+        civilian.setActionDay(false);
+        assertTrue(civilian.checkOwnActivity());
+    }
+
+    @Test
+    void getName() {
+        assertEquals(civilian.toString(), RedPlayers.CIVILIAN.getNameRole());
     }
 }

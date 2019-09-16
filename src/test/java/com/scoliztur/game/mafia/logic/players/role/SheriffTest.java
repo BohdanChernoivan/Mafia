@@ -36,6 +36,6 @@ class SheriffTest {
 
     @Test
     void getName() {
-        assertEquals(sheriff.toString(), RedPlayers.SHERIFF.getRedPlayer());
+        assertEquals(sheriff.toString(), RedPlayers.SHERIFF.getNameRole());
     }
 }

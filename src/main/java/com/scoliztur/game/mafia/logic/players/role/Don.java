@@ -13,17 +13,19 @@ public class Don extends Mafia {
     public String findSheriff(Player player, boolean day) {
 
         if (this.isActionNight() && !day) {
-            if (player.toString().equals(RedPlayers.SHERIFF.getRedPlayer())) {
+            if (player.toString().equals(RedPlayers.SHERIFF.getNameRole())) {
                 return this.toString() + " found Sheriff";
             } else return this.toString() + " not found Sheriff";
-        } else if (!checkOwnActivity(day)) {
+        } else if (!checkOwnActivity()) {
             return this.toString() + " is not active";
+        } else if (day) {
+            return "Now day";
         }
         return null;
     }
 
     @Override
     public String toString() {
-        return BlackPlayers.DON.getBlackPlayer();
+        return BlackPlayers.DON.getNameRole();
     }
 }

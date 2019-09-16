@@ -1,43 +1,30 @@
 package com.scoliztur.game.mafia.services;
 
-import com.scoliztur.game.mafia.logic.Roles;
-import com.scoliztur.game.mafia.logic.players.basic.Player;
+import com.scoliztur.game.mafia.logic.act_game.Murder;
+import com.scoliztur.game.mafia.logic.act_game.OfferForKilling;
+import com.scoliztur.game.mafia.logic.game.CompleteGame;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class Game {
 
-    protected Roles roles = new Roles();
+    public CompleteGame completeGame = new CompleteGame();
 
-    public void addRole(Player player) {
-        roles.insert(player);
+    public void newListForMaffiozi() {
+        completeGame.listForMafia = new OfferForKilling();
     }
 
-    private boolean isDay = false;
-    private List<Player> playerList;
-
-    public void start() {
-
-        playerList = roles.getPlayerList();
-//
-//        Mafia mafia = new Mafia();
-//        Sheriff sheriff = new Sheriff();
-//        Barman barman = new Barman();
-//        Courtesan courtesan = new Courtesan();
-//
-//        OfferForKilling offeredPlayer;
-//
-//        offeredPlayer = new OfferForKilling(courtesan);
-
+    public void newListForCivilian() {
+        completeGame.listForCivilian = new OfferForKilling();
     }
 
-    public void day() {
-        isDay = true;
+    public void murderDay() {
+        Murder.killFromSelected(completeGame.listForCivilian, completeGame.playerList);
     }
 
-    public void night() {
-        isDay = false;
+    public void murderNightForMaffiozi() {
+        Murder.killFromSelected(completeGame.listForMafia, completeGame.playerList);
     }
+
 }
