@@ -10,7 +10,6 @@ public class Doctor extends Player {
     }
 
     public String resurrect(Player player, boolean day) {
-
         if (this.isActionNight() && !day) {
             player.setAlive(true);
             return player.getName() + " resurrected";

@@ -11,7 +11,6 @@ public class Don extends Mafia {
     }
 
     public String findSheriff(Player player, boolean day) {
-
         if (this.isActionNight() && !day) {
             if (player.toString().equals(RedPlayers.SHERIFF.getNameRole())) {
                 return this.toString() + " found Sheriff";

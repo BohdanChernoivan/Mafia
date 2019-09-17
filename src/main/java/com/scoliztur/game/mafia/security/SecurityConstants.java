@@ -2,7 +2,7 @@ package com.scoliztur.game.mafia.security;
 
 public final class SecurityConstants {
 
-    public static final String AUTH_LOGIN_URL = "/api/authenticate";
+    public static final String AUTH_LOGIN_URL = "/mafia/registration";
 
     // Signing key for HS512 algorithm
     // You can use the page http://www.allkeysgenerator.com/ to generate all kinds of keys
@@ -14,6 +14,7 @@ public final class SecurityConstants {
     public static final String TOKEN_TYPE = "JWT";
     public static final String TOKEN_ISSUER = "secure-api";
     public static final String TOKEN_AUDIENCE = "secure-app";
+    public static final long EXPIRATION_TIME = 864_000_000L;
 
 
     private SecurityConstants() {

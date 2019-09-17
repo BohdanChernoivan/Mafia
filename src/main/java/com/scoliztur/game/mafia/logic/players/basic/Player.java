@@ -1,6 +1,6 @@
 package com.scoliztur.game.mafia.logic.players.basic;
 
-import com.scoliztur.game.mafia.logic.act_game.OfferForKilling;
+import com.scoliztur.game.mafia.logic.OfferForKilling;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +31,6 @@ public abstract class Player {
     }
 
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
-
         if(day) {
             for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerByteMap().entrySet()) {
                 if (entry.getKey() == player) {
@@ -40,7 +39,6 @@ public abstract class Player {
                 }
             }
             return "There is no such player";
-//            return "No list of offered players";
         } else
             return "Now is not day";
     }

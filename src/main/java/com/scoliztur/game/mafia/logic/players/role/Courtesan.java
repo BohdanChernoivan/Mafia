@@ -13,7 +13,6 @@ public class Courtesan extends Player {
     }
 
     public String confuse(Player player, boolean day) {
-
         if(this.isActionNight() && !day) {
             getAwayFromPlayer();
             victim = player;

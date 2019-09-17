@@ -11,7 +11,6 @@ public class Sheriff extends Player {
     }
 
     public String findMafia(Player player, boolean day) {
-
         if(this.isActionNight() && !day) {
             if(player.toString().equals(BlackPlayers.MAFIA.getNameRole()) ||
                     player.toString().equals(BlackPlayers.DON.getNameRole()) ||

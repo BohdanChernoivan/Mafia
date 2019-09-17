@@ -5,12 +5,10 @@ import com.scoliztur.game.mafia.logic.players.role.*;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 
-public class RolePlayerFactory implements CreatorPlayer{
-
+public class RolePlayerFactory implements CreatorPlayer {
 
     @Override
     public Player createRedPlayer(RedPlayers redPlayer, String name) {
-
         switch (redPlayer) {
             case SHERIFF:
                 return new Sheriff(name);
@@ -27,7 +25,6 @@ public class RolePlayerFactory implements CreatorPlayer{
 
     @Override
     public Player createBlackPlayer(BlackPlayers blackPlayer, String name) {
-
         switch (blackPlayer) {
             case DON:
                 return new Don(name);

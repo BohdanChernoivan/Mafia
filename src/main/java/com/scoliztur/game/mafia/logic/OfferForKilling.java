@@ -1,4 +1,4 @@
-package com.scoliztur.game.mafia.logic.act_game;
+package com.scoliztur.game.mafia.logic;
 
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 
@@ -22,7 +22,6 @@ public class OfferForKilling {
     }
 
     public List<Player> getPlayerList() {
-
         List<Player> list = new ArrayList<>();
 
         for (Map.Entry<Player, Byte> entry : playerByteMap.entrySet()) {

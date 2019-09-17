@@ -1,30 +1,24 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.Room;
-import com.scoliztur.game.mafia.entity.User;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
-import com.scoliztur.game.mafia.logic.players.role.*;
-import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
-import com.scoliztur.game.mafia.services.Game;
+import com.scoliztur.game.mafia.services.game.CompleteGame;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequestMapping("mafia/players")
 public class RolesController {
 
-    private final Game game;
+    private final CompleteGame game;
     private final RoomRepositories roomRepositories;
 
-    public RolesController(Game game, RoomRepositories roomRepositories) {
+    public RolesController(CompleteGame game, RoomRepositories roomRepositories) {
         this.game = game;
         this.roomRepositories = roomRepositories;
     }
@@ -36,7 +30,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
 
-        return "Added " + blackPlayers.getBlackPlayer();
+        return "Added " + blackPlayers.getNameRole();
     }
 
     @GetMapping("/add/Mafia")
@@ -46,7 +40,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
 
-        return "Added " +  blackPlayers.getBlackPlayer();
+        return "Added " +  blackPlayers.getNameRole();
     }
 
     @GetMapping("/add/Courtesan")
@@ -56,7 +50,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getBlackPlayers().add(blackPlayers);
 
-        return "Added " +  blackPlayers.getBlackPlayer();
+        return "Added " +  blackPlayers.getNameRole();
     }
 
     @GetMapping("/add/Sheriff")
@@ -66,7 +60,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
 
-        return "Added " + redPlayers.getRedPlayer();
+        return "Added " + redPlayers.getNameRole();
     }
 
     @GetMapping("/add/Barman")
@@ -76,7 +70,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
 
-        return "Added " + redPlayers.getRedPlayer();
+        return "Added " + redPlayers.getNameRole();
     }
 
     @GetMapping("/add/Doctor")
@@ -86,7 +80,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
 
-        return "Added " + redPlayers.getRedPlayer();
+        return "Added " + redPlayers.getNameRole();
     }
 
     @GetMapping("/add/Civilian")
@@ -96,7 +90,7 @@ public class RolesController {
 
         roomRepositories.getOne(room.getId()).getRedPlayers().add(redPlayers);
 
-        return "Added " + redPlayers.getRedPlayer();
+        return "Added " + redPlayers.getNameRole();
     }
 
     private void addPlayersInRoom(Player player, Room roomClone) {

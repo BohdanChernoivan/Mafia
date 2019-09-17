@@ -1,6 +1,7 @@
 package com.scoliztur.game.mafia.filters;
 
-import com.scoliztur.game.mafia.security.SecurityConstants;
+import com.scoliztur.game.mafia.filters.model.ApplicationUser;
+import com.scoliztur.game.mafia.services.CustomUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -10,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
@@ -20,21 +21,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.scoliztur.game.mafia.security.SecurityConstants.*;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
+                                  CustomUserDetailsService customUserDetailsService) {
         super(authenticationManager);
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
         var authentication = getAuthentication(request);
+
         if (authentication == null) {
             filterChain.doFilter(request, response);
             return;
@@ -45,26 +50,30 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        var token = request.getHeader(SecurityConstants.TOKEN_HEADER);
-        if (!StringUtils.isEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        var token = request.getHeader(TOKEN_HEADER);
+
+        if (!StringUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
             try {
-                var signingKey = SecurityConstants.JWT_SECRET.getBytes();
+                var signingKey = JWT_SECRET.getBytes();
 
                 var parsedToken = Jwts.parser()
                         .setSigningKey(signingKey)
-                        .parseClaimsJws(token.replace("Bearer ", ""));
+                        .parseClaimsJws(token.replace(TOKEN_PREFIX, ""));
 
                 var username = parsedToken
                         .getBody()
                         .getSubject();
 
-                var authorities = ((List<?>) parsedToken.getBody()
-                        .get("rol")).stream()
-                        .map(authority -> new SimpleGrantedAuthority((String) authority))
-                        .collect(Collectors.toList());
+//                var authorities = ((List<?>) parsedToken.getBody()
+//                        .get("rol")).stream()
+//                        .map(authority -> new SimpleGrantedAuthority((String) authority))
+//                        .collect(Collectors.toList());
+
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                ApplicationUser applicationUser = customUserDetailsService.loadApplicationUserByUsername(username);
 
                 if (!StringUtils.isEmpty(username)) {
-                    return new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    return new UsernamePasswordAuthenticationToken(applicationUser, null, userDetails.getAuthorities());
                 }
             } catch (SignatureException exception) {
                 log.warn("JWT signature does not match locally computed signature : {} failed : {}", token, exception.getMessage());

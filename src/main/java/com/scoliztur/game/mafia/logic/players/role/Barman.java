@@ -13,7 +13,6 @@ public class Barman extends Player {
     }
 
     public String poison(Player player, boolean day) {
-
         if(this.isActionNight() && !day) {
             getAwayFromPlayer();
             victim = player;

@@ -1,7 +1,6 @@
 package com.scoliztur.game.mafia.entity;
 
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
-import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import lombok.*;
@@ -17,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(callSuper = false)
 public class Room extends BaseEntity {
 
     @Column(name = "name")

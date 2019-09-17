@@ -1,8 +1,8 @@
 package com.scoliztur.game.mafia.services;
 
-import com.scoliztur.game.mafia.logic.PlayerList;
-import com.scoliztur.game.mafia.logic.act_game.Murder;
-import com.scoliztur.game.mafia.logic.act_game.OfferForKilling;
+import com.scoliztur.game.mafia.logic.players.PlayerList;
+import com.scoliztur.game.mafia.logic.Murder;
+import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 

@@ -1,6 +1,6 @@
-package com.scoliztur.game.mafia.logic.act_game;
+package com.scoliztur.game.mafia.logic;
 
-import com.scoliztur.game.mafia.logic.PlayerList;
+import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 
 import java.util.Map;
@@ -8,7 +8,6 @@ import java.util.Map;
 public final class Murder {
 
     public static String killFromSelected(OfferForKilling playerMap, PlayerList playerList) {
-
         Map.Entry<Player, Byte> mapForKilledPlayer = null;
 
         for (Map.Entry<Player, Byte> entry : playerMap.getPlayerByteMap().entrySet()) {
