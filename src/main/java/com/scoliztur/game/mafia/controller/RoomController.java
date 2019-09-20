@@ -59,7 +59,7 @@ public class RoomController {
         roomRepositories.getOne(room.getId()).getUsers().add(user);
 
         roomRepositories.getOne(room.getId())
-                .setPlayersNow(roomRepositories.getOne(room.getId()).getMaxSizePlayers() + 1);
+                .setPlayersNow(roomRepositories.getOne(room.getId()).getPlayersNow() + 1);
 
         return "User " + userRepositories.getOne(user.getId()).getUsername()
                 + " join in room -> " + roomRepositories.getOne(room.getId()).getName();

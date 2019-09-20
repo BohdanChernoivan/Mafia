@@ -35,17 +35,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign_up").permitAll()
-                .antMatchers("/rooms").hasRole("USER")
-                .antMatchers("/my_game").hasRole("LEADING")
-//                .anyRequest().authenticated()
-//                .and()
-//                .logout().permitAll()
+                .antMatchers(HttpMethod.POST, "/api/sign_up").permitAll()
+                .antMatchers("*/mafia/**").hasRole(RoleStatus.PLAYER.getUserRole())
+                .anyRequest().authenticated()
+                .and()
+                .logout().permitAll()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), customUserDetailsService));
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), customUserDetailsService))
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
@@ -57,16 +56,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-//
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+
+        return source;
+    }
 
 }

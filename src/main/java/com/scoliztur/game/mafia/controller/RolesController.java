@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("mafia/players")
+@RequestMapping("/mafia/players")
 public class RolesController {
 
     private final CompleteGame game;

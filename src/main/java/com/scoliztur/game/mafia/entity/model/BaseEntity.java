@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class BaseEntity {
     private UUID id;
 
     @LastModifiedDate
+    @DateTimeFormat
     @Column(name = "update")
     private Date update;
 }

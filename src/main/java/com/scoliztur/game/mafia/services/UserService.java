@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.entity.User;
 import com.scoliztur.game.mafia.entity.Role;
 import com.scoliztur.game.mafia.entity.repositories.RoleRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
+import com.scoliztur.game.mafia.security.SecurityConfiguration;
 import com.scoliztur.game.mafia.services.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,14 @@ public class UserService implements UserModel {
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
 
-//        user.setPassword(passwordEncoder().encode(user.getPassword()));
-//        user.setRoles(userRoles);
+        user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
+        user.setRoles(userRoles);
 
-        User registeredUser = userRepositories.save(user);
+        userRepositories.save(user);
 
-        log.info("In register - user: {} successfully registered", registeredUser);
+        log.info("In register - user: {} successfully registered", user);
 
-        return registeredUser;
+        return user;
     }
 
     @Override
@@ -82,9 +83,4 @@ public class UserService implements UserModel {
 
         log.info("In findById - user with id: {} successfully deleted", uuid);
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 }

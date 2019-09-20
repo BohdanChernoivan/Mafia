@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 import static com.scoliztur.game.mafia.security.SecurityConstants.*;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
@@ -64,17 +65,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
                         .getBody()
                         .getSubject();
 
-//                var authorities = ((List<?>) parsedToken.getBody()
-//                        .get("rol")).stream()
-//                        .map(authority -> new SimpleGrantedAuthority((String) authority))
-//                        .collect(Collectors.toList());
-
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                 ApplicationUser applicationUser = customUserDetailsService.loadApplicationUserByUsername(username);
+                applicationUser.setPassword(parsedToken.getSignature());
 
-                if (!StringUtils.isEmpty(username)) {
-                    return new UsernamePasswordAuthenticationToken(applicationUser, null, userDetails.getAuthorities());
-                }
+                return username != null ? new UsernamePasswordAuthenticationToken(applicationUser.getUsername(), null, userDetails.getAuthorities()) : null;
+
             } catch (SignatureException exception) {
                 log.warn("JWT signature does not match locally computed signature : {} failed : {}", token, exception.getMessage());
             } catch (ExpiredJwtException exception) {

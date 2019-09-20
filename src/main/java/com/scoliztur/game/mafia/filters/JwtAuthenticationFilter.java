@@ -70,6 +70,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("rol", roles)
                 .compact();
 
+        try {
+            response.getWriter().write(token);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         response.addHeader(TOKEN_HEADER, TOKEN_PREFIX + token);
     }
 }
