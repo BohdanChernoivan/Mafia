@@ -7,13 +7,16 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 public class User extends BaseEntity {
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Column(name = "username", nullable = false, unique = true, length = 30)
     private String username;
@@ -26,11 +29,12 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    private List<Role> role;
 
     @ManyToOne(targetEntity = Room.class)
     @JoinColumn(name = "roomId")
     private Room roomUser;
+
 
     //player to room
 

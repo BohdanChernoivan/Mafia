@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/mafia/game")
 public class GameController {
@@ -20,7 +22,8 @@ public class GameController {
     }
 
     @GetMapping
-    public void getRoles() {
+    public void getRoles(Principal principal) {
+        principal.getName();
         game.playerList.insertPlayer(
                 rolePlayerFactory
                 .createBlackPlayer(BlackPlayers.DON, "Pet")

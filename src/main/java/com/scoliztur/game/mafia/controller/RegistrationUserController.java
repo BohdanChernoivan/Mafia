@@ -3,12 +3,13 @@ package com.scoliztur.game.mafia.controller;
 import com.scoliztur.game.mafia.entity.User;
 import com.scoliztur.game.mafia.filters.validator.Validator;
 import com.scoliztur.game.mafia.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
 public class RegistrationUserController {
 
     private final UserService userService;

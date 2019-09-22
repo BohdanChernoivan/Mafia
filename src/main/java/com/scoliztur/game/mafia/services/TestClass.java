@@ -1,10 +1,13 @@
 package com.scoliztur.game.mafia.services;
 
+import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
+import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
+import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 
 import java.util.*;
 
@@ -91,5 +94,59 @@ public class TestClass {
         System.out.println(doctor.resurrect(courtesan, day));
 
         System.out.println(listForMafia.getPlayerByteMap().size());
+
+        List<Player> playerArrayList = new ArrayList<>();
+        List<String> nameLinkedList = new LinkedList<>();
+        nameLinkedList.add("VANY");
+        nameLinkedList.add("DSA");
+        nameLinkedList.add("dsada");
+        nameLinkedList.add("dsadsadaf");
+        nameLinkedList.add("ds123adaf");
+        nameLinkedList.add("dsa546daf");
+
+        playerArrayList.add(sheriff);
+        playerArrayList.add(mafia);
+        playerArrayList.add(barman);
+
+        System.out.println("HAVAT");
+
+        PlayerList playerList1 = randomDistributionOfRole(nameLinkedList, playerArrayList);
+
+        for (Player player: playerList1.getPlayerList()) {
+            System.out.println("NAME = " + player.getName() + " ROLE = " + player.toString());
+        }
+
+    }
+
+    private static PlayerList randomDistributionOfRole(List<String> users, List<Player> listOfRole) {
+
+        PlayerList cloneList = new PlayerList();
+
+        int minPlayersInRoom = 5;
+
+        if(minPlayersInRoom > listOfRole.size()) {
+            int notEnoughPlayers = minPlayersInRoom - listOfRole.size();
+            for (int i = 0; i < notEnoughPlayers; i++) {
+                listOfRole.add(new RolePlayerFactory().createRedPlayer(RedPlayers.CIVILIAN, ""));
+            }
+        }
+
+
+        Collections.shuffle(listOfRole);
+
+
+        for (Player player : listOfRole) {
+            call(player, users, cloneList);
+        }
+
+        return cloneList;
+    }
+
+    public static void call(Player player, List<String> strings, PlayerList playerList) {
+
+        int random1 = new Random().nextInt(strings.size());
+        player.setName(strings.get(random1));
+        playerList.insertPlayer(player);
+        strings.remove(strings.get(random1));
     }
 }

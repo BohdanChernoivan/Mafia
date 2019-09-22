@@ -4,13 +4,15 @@ import com.scoliztur.game.mafia.entity.User;
 import com.scoliztur.game.mafia.entity.Role;
 import com.scoliztur.game.mafia.entity.repositories.RoleRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
-import com.scoliztur.game.mafia.security.SecurityConfiguration;
+import com.scoliztur.game.mafia.filters.model.RoleStatus;
 import com.scoliztur.game.mafia.services.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,19 +24,24 @@ public class UserService implements UserModel {
     private final RoleRepositories roleRepositories;
 
     @Autowired
-    public UserService(UserRepositories userRepositories, RoleRepositories roleRepositories) {
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepositories userRepositories, RoleRepositories roleRepositories, PasswordEncoder passwordEncoder) {
         this.userRepositories = userRepositories;
         this.roleRepositories = roleRepositories;
+//        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
-        Role roleUser = roleRepositories.findByName("ROLE_USER");
+        Role roleUser = roleRepositories.findByName(RoleStatus.PLAYER.name());
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
 
-        user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
-        user.setRoles(userRoles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(userRoles);
+        user.setUpdate(new Date());
 
         userRepositories.save(user);
 

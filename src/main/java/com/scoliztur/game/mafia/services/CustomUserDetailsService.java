@@ -21,6 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public ApplicationUser loadApplicationUserByUsername(String username) {
-        return new ApplicationUser(username, "password");
+        return new ApplicationUser(username, "");
     }
 }

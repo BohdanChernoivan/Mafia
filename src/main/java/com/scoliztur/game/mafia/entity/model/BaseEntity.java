@@ -6,10 +6,7 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,8 +21,8 @@ public class BaseEntity {
     @Column(name = "id", unique = true)
     private UUID id;
 
-    @LastModifiedDate
-    @DateTimeFormat
+//    @LastModifiedDate
+    @Temporal(TemporalType.DATE)
     @Column(name = "update")
     private Date update;
 }

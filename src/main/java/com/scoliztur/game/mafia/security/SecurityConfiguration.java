@@ -35,8 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/sign_up").permitAll()
-                .antMatchers("*/mafia/**").hasRole(RoleStatus.PLAYER.getUserRole())
+                .antMatchers(HttpMethod.POST, "/sign_up").permitAll()
+//                .antMatchers("/mafia/**").hasAnyRole()
                 .anyRequest().authenticated()
                 .and()
                 .logout().permitAll()
@@ -45,18 +45,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), customUserDetailsService))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+//        .hasRole(RoleStatus.PLAYER.getUserRole())
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("username")
-                .password(passwordEncoder().encode("password"))
-                .authorities(RoleStatus.PLAYER.getUserRole());
-    }
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

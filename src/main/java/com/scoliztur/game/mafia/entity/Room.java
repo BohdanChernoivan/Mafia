@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "rooms")
+@Table(name = "room")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,8 +30,11 @@ public class Room extends BaseEntity {
     @Column(name = "redPlayers")
     private List<RedPlayers> redPlayers;
 
-    @Column(name = "max_size_players", nullable = false, length = 15)
+    @Column(name = "max_size_players", nullable = false)
     private int maxSizePlayers;
+
+    @Column(name = "min_size_players", nullable = false)
+    private int minSizePlayers;
 
     @Column(name = "players_now")
     private int playersNow;
