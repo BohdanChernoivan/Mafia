@@ -1,12 +1,12 @@
 package com.scoliztur.game.mafia.entity.repositories;
 
-import com.scoliztur.game.mafia.entity.User;
+import com.scoliztur.game.mafia.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface UserRepositories extends JpaRepository<User, UUID> {
-     User findUserByUsername(String name);
+public interface UserRepositories extends JpaRepository<AppUser, UUID> {
+     AppUser findUserByUsername(String name);
 }

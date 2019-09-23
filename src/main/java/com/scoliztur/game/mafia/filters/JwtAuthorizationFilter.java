@@ -1,7 +1,7 @@
 package com.scoliztur.game.mafia.filters;
 
-import com.scoliztur.game.mafia.filters.model.ApplicationUser;
-import com.scoliztur.game.mafia.services.CustomUserDetailsService;
+import com.scoliztur.game.mafia.entity.AppUser;
+import com.scoliztur.game.mafia.services.user.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -9,10 +9,11 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 import static com.scoliztur.game.mafia.security.SecurityConstants.*;
@@ -28,12 +31,12 @@ import static com.scoliztur.game.mafia.security.SecurityConstants.*;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
-    private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-                                  CustomUserDetailsService customUserDetailsService) {
+    @Autowired
+    private UserService userService;
+
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
-        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override
@@ -65,11 +68,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
                         .getBody()
                         .getSubject();
 
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-                ApplicationUser applicationUser = customUserDetailsService.loadApplicationUserByUsername(username);
-                applicationUser.setPassword(parsedToken.getSignature());
+                var authorities = ((List<?>) parsedToken.getBody()
+                        .get("rol")).stream()
+                        .map(authority -> new SimpleGrantedAuthority((String) authority))
+                        .collect(Collectors.toList());
 
-                return username != null ? new UsernamePasswordAuthenticationToken(applicationUser.getUsername(), null, userDetails.getAuthorities()) : null;
+                AppUser appUser = userService.findByUsername(username);
+                appUser.setPassword(parsedToken.getSignature());
+
+                return username != null
+                        ? new UsernamePasswordAuthenticationToken(appUser.getUsername(), null, authorities)
+                        : null;
 
             } catch (SignatureException exception) {
                 log.warn("JWT signature does not match locally computed signature : {} failed : {}", token, exception.getMessage());

@@ -13,10 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class User extends BaseEntity {
+public class AppUser extends BaseEntity {
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "login", nullable = false, unique = true)
+    private String login;
 
     @Column(name = "username", nullable = false, unique = true, length = 30)
     private String username;
@@ -29,16 +29,10 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
-    private List<Role> role;
+    private List<RoleUser> roleUser;
 
     @ManyToOne(targetEntity = Room.class)
     @JoinColumn(name = "roomId")
     private Room roomUser;
 
-
-    //player to room
-
-    // @ManyToOne()
-    //    @JoinColumn(name = "Statistics", jointColumns = @JoinColumn(name = "tid"), inverseJoinColumn = @JoinColumn(name = "id"))
-    // public Student getStud() { return stud }
 }

@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -39,6 +38,6 @@ public class Room extends BaseEntity {
     @Column(name = "players_now")
     private int playersNow;
 
-    @OneToMany(mappedBy = "roomUser", cascade = CascadeType.ALL, targetEntity = User.class)
-    private Set<User> users;
+    @OneToMany(mappedBy = "roomUser", cascade = CascadeType.ALL, targetEntity = AppUser.class)
+    private List<AppUser> appUsers;
 }

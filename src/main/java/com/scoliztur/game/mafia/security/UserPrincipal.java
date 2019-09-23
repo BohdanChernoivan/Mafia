@@ -1,6 +1,6 @@
 package com.scoliztur.game.mafia.security;
 
-import com.scoliztur.game.mafia.entity.User;
+import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.filters.model.RoleStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,10 +12,10 @@ import java.util.List;
 
 public class UserPrincipal implements UserDetails {
 
-    private User user;
+    private AppUser appUser;
 
-    public UserPrincipal(User user) {
-        this.user = user;
+    public UserPrincipal(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     @Override
@@ -25,18 +25,15 @@ public class UserPrincipal implements UserDetails {
         return authorities;
     }
 
-    public String getEmail() {
-        return user.getEmail();
-    }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return appUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return appUser.getUsername();
     }
 
     @Override

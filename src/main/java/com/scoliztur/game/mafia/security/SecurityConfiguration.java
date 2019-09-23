@@ -1,13 +1,12 @@
 package com.scoliztur.game.mafia.security;
 
-import com.scoliztur.game.mafia.filters.model.RoleStatus;
 import com.scoliztur.game.mafia.filters.JwtAuthenticationFilter;
 import com.scoliztur.game.mafia.filters.JwtAuthorizationFilter;
-import com.scoliztur.game.mafia.services.CustomUserDetailsService;
+import com.scoliztur.game.mafia.services.user.CustomUserDetailsService;
+import com.scoliztur.game.mafia.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,12 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,17 +29,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/sign_up").permitAll()
-//                .antMatchers("/mafia/**").hasAnyRole()
                 .anyRequest().authenticated()
                 .and()
                 .logout().permitAll()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), customUserDetailsService))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-//        .hasRole(RoleStatus.PLAYER.getUserRole())
     }
 
 

@@ -1,18 +1,18 @@
 package com.scoliztur.game.mafia.controller;
 
-import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
-import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
-import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/mafia/players")
+@RequestMapping("/mafia/players/")
 public class RolesController {
 
     private final CompleteGame game;
@@ -26,7 +26,7 @@ public class RolesController {
         this.roomRepositories = roomRepositories;
     }
 
-    @GetMapping("/add/Don")
+    @PostMapping("add_don")
     public String addDon(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addDon(roomId);
@@ -36,7 +36,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Mafia")
+    @PostMapping("add_mafia")
     public String addMafia(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addMafia(roomId);
@@ -46,7 +46,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Courtesan")
+    @PostMapping("add_courtesan")
     public String addCourtesan(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addCourtesan(roomId);
@@ -56,7 +56,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Sheriff")
+    @PostMapping("add_sheriff")
     public String addSheriff(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addSheriff(roomId);
@@ -66,7 +66,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Barman")
+    @PostMapping("add_barman")
     public String addBarman(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addBarman(roomId);
@@ -76,7 +76,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Doctor")
+    @PostMapping("add_doctor")
     public String addDoctor(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
         roleForRoom.addDoctor(roomId);
@@ -86,7 +86,7 @@ public class RolesController {
         }
     }
 
-    @GetMapping("/add/Civilian")
+    @PostMapping("add_civilian")
     public String addCivilian(@RequestParam UUID roomId) {
         if(roomRepositories.existsById(roomId)) {
             roleForRoom.addCivilian(roomId);
@@ -97,4 +97,11 @@ public class RolesController {
     }
 
 
+    @PostMapping("shuffle_role")
+    public void shuffleAndFillIn(@RequestParam UUID roomId) {
+        game.playerList = RoleForRoom.randomDistributionOfRole(
+                roomRepositories.getOne(roomId),
+                roleForRoom.getListOfRole()
+        );
+    }
 }

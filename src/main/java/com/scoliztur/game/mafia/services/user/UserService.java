@@ -1,18 +1,17 @@
-package com.scoliztur.game.mafia.services;
+package com.scoliztur.game.mafia.services.user;
 
-import com.scoliztur.game.mafia.entity.User;
-import com.scoliztur.game.mafia.entity.Role;
+import com.scoliztur.game.mafia.entity.AppUser;
+import com.scoliztur.game.mafia.entity.RoleUser;
 import com.scoliztur.game.mafia.entity.repositories.RoleRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.filters.model.RoleStatus;
-import com.scoliztur.game.mafia.services.model.UserModel;
+import com.scoliztur.game.mafia.services.user.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,48 +21,46 @@ public class UserService implements UserModel {
 
     private final UserRepositories userRepositories;
     private final RoleRepositories roleRepositories;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepositories userRepositories, RoleRepositories roleRepositories, PasswordEncoder passwordEncoder) {
         this.userRepositories = userRepositories;
         this.roleRepositories = roleRepositories;
-//        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    @Override
+    public AppUser register(AppUser appUser) {
+        RoleUser roleUser = roleRepositories.findByName(RoleStatus.PLAYER.name());
+        List<RoleUser> userRoleUsers = new ArrayList<>();
+        userRoleUsers.add(roleUser);
+
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        appUser.setRoleUser(userRoleUsers);
+
+        userRepositories.save(appUser);
+
+        log.info("In register - appUser: {} successfully registered", appUser);
+
+        return appUser;
     }
 
     @Override
-    public User register(User user) {
-        Role roleUser = roleRepositories.findByName(RoleStatus.PLAYER.name());
-        List<Role> userRoles = new ArrayList<>();
-        userRoles.add(roleUser);
+    public List<AppUser> getAll() {
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(userRoles);
-        user.setUpdate(new Date());
+        List<AppUser> result = userRepositories.findAll();
 
-        userRepositories.save(user);
-
-        log.info("In register - user: {} successfully registered", user);
-
-        return user;
-    }
-
-    @Override
-    public List<User> getAll() {
-
-        List<User> result = userRepositories.findAll();
-
-        log.info("In getAll - {} users found", result.size());
+        log.info("In getAll - {} appUsers found", result.size());
 
         return result;
     }
 
     @Override
-    public User findByUsername(String username) {
+    public AppUser findByUsername(String username) {
 
-        User result = userRepositories.findUserByUsername(username);
+        AppUser result = userRepositories.findUserByUsername(username);
 
         log.info("In findByUsername - user: {} found by username: {}", result, username);
 
@@ -71,9 +68,9 @@ public class UserService implements UserModel {
     }
 
     @Override
-    public User findById(UUID uuid) {
+    public AppUser findById(UUID uuid) {
 
-        User result = userRepositories.findById(uuid).orElse(null);
+        AppUser result = userRepositories.findById(uuid).orElse(null);
 
         if(result == null) {
             log.warn("In findById - no user found by id: {}", uuid);

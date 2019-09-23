@@ -3,11 +3,10 @@ package com.scoliztur.game.mafia.entity.model;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -21,8 +20,7 @@ public class BaseEntity {
     @Column(name = "id", unique = true)
     private UUID id;
 
-//    @LastModifiedDate
-    @Temporal(TemporalType.DATE)
-    @Column(name = "update")
-    private Date update;
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    private LocalDateTime update;
 }

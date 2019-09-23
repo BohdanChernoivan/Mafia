@@ -1,5 +1,6 @@
 package com.scoliztur.game.mafia.services.game;
 
+import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
@@ -20,6 +21,10 @@ public class RoleForRoom {
 
     private final RoomRepositories roomRepositories;
     private final List<Player> listOfRole;
+
+    public List<Player> getListOfRole() {
+        return listOfRole;
+    }
 
     @Autowired
     public RoleForRoom(RoomRepositories roomRepositories, List<Player> ListOfRole) {
@@ -76,7 +81,7 @@ public class RoleForRoom {
     }
 
 
-    public PlayerList randomDistributionOfRole(Room room, List<String> usernameList, List<Player> listOfRole) {
+    public static PlayerList randomDistributionOfRole(Room room, List<Player> listOfRole) {
 
         PlayerList cloneList = new PlayerList();
 
@@ -92,40 +97,17 @@ public class RoleForRoom {
         Collections.shuffle(listOfRole);
 
         for (Player player : listOfRole) {
-            insertRndUsername(player, usernameList, cloneList);
+            insertRndUsername(player, room.getAppUsers(), cloneList);
         }
 
         return cloneList;
     }
 
-    private void insertRndUsername(Player player, List<String> usernameList, PlayerList playerList) {
+    private static void insertRndUsername(Player player, List<AppUser> usernameList, PlayerList playerList) {
 
         int rndElementFromListNames = new Random().nextInt(usernameList.size());
-        player.setName(usernameList.get(rndElementFromListNames));
+        player.setName(usernameList.get(rndElementFromListNames).getUsername());
         playerList.insertPlayer(player);
         usernameList.remove(usernameList.get(rndElementFromListNames));
     }
-
-//    private PlayerList randomDistributionOfRole(Room room, List<String> users, List<Player> listOfRole) {
-//
-//        PlayerList cloneList = new PlayerList();
-//
-//        int needPlayersInRoom = room.getMinSizePlayers();
-//
-//        if(needPlayersInRoom < listOfRole.size()) {
-//            int notEnoughPlayers = needPlayersInRoom - listOfRole.size();
-//            for (int i = 0; i < notEnoughPlayers; i++) {
-//                listOfRole.add(new RolePlayerFactory().createRedPlayer(RedPlayers.CIVILIAN, ""));
-//            }
-//        }
-//
-//        for (Player player : listOfRole) {
-//            for (String name : users) {
-//                player.setName(name);
-//                cloneList.insertPlayer(player);
-//            }
-//        }
-//
-//        return cloneList;
-//    }
 }

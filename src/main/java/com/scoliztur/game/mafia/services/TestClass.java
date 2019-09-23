@@ -1,15 +1,16 @@
 package com.scoliztur.game.mafia.services;
 
-import com.scoliztur.game.mafia.entity.Room;
-import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
+import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TestClass {
     public static void main(String[] args) {
@@ -116,6 +117,20 @@ public class TestClass {
             System.out.println("NAME = " + player.getName() + " ROLE = " + player.toString());
         }
 
+
+
+        String login = "dfdsdas";
+        String name = "Bo";
+        String password = "legljv97";
+
+
+        System.out.println(login.matches(LOGIN));
+        System.out.println(name.matches(USERNAME));
+        System.out.println(password.matches(PASSWORD));
+
+        boolean s = login.matches(LOGIN) && name.matches(USERNAME) && password.matches(PASSWORD);
+
+        System.out.println(s);
     }
 
     private static PlayerList randomDistributionOfRole(List<String> users, List<Player> listOfRole) {
@@ -149,4 +164,15 @@ public class TestClass {
         playerList.insertPlayer(player);
         strings.remove(strings.get(random1));
     }
+
+    // Логин может состоять из букв, цифр, дефисов и подчёркиваний. Длина от 4 до 16 символов.
+    private static final String LOGIN = "^[a-zA-Z0-9_-]{4,16}$";
+
+    // Имя пользователя может состоять из любых латинских букв и цифр. Длина от 3 до 9 символов
+    private static final String USERNAME = "^[a-zA-Z0-9]{3,9}$";
+
+    // Пароль может состоять из любых латинских букв и цифр. Длина от 5 до 12 символов
+    private static final String PASSWORD = "^[a-zA-Z0-9]{5,12}$";
+
+
 }

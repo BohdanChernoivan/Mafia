@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
 
-    public PlayerList playerList = new PlayerList();
+    public PlayerList playerList;
     public OfferForKilling listForMafia;
     public OfferForKilling listForCivilian;
     private boolean isDay;
@@ -43,6 +43,5 @@ public class CompleteGame implements ChangeOfDayAndNight {
     public void murderNightForMaffiozi() {
         Murder.killFromSelected(listForMafia, playerList);
     }
-
 
 }

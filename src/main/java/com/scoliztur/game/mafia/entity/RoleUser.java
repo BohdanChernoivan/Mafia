@@ -9,17 +9,17 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roleUser")
 @Getter
 @Setter
 @ToString
-public class Role extends BaseEntity {
+public class RoleUser extends BaseEntity {
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private List<User> users;
+    @ManyToMany(mappedBy = "roleUser", fetch = FetchType.LAZY)
+    private List<AppUser> appUsers;
 
 }
 

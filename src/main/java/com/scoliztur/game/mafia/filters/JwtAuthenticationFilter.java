@@ -1,7 +1,7 @@
 package com.scoliztur.game.mafia.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scoliztur.game.mafia.filters.model.ApplicationUser;
+import com.scoliztur.game.mafia.entity.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -35,11 +35,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // {"username": "name", "password": "pass"}
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         try {
-            ApplicationUser applicationUser = new ObjectMapper().readValue(request.getInputStream(), ApplicationUser.class);
+            AppUser appUser = new ObjectMapper().readValue(request.getInputStream(), AppUser.class);
 
             var authenticationToken = new UsernamePasswordAuthenticationToken(
-                    applicationUser.getUsername(),
-                    applicationUser.getPassword());
+                    appUser.getUsername(),
+                    appUser.getPassword());
 
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
@@ -68,7 +68,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .claim("rol", roles)
-//                .claim("id", user.getUserId())
                 .compact();
 
         try {
