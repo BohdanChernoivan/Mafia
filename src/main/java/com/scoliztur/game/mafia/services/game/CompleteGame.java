@@ -5,6 +5,8 @@ import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
 

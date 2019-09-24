@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PlayerList {
 
-    private List<Player> playerList;
+    private ArrayList<Player> playerList;
 
     public PlayerList() {
         playerList = new ArrayList<>();
@@ -19,6 +19,7 @@ public class PlayerList {
 
     public void deletePlayer(Player player) {
         playerList.remove(player);
+        playerList.trimToSize();
     }
 
     public List<Player> getPlayerList() {
