@@ -18,11 +18,14 @@ public class AppUser extends BaseEntity {
     @Column(name = "login", nullable = false, unique = true)
     private String login;
 
-    @Column(name = "username", nullable = false, unique = true, length = 30)
+    @Column(name = "username", nullable = false, unique = true, length = 12)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Transient
+    private String confirmPassword;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -32,7 +35,7 @@ public class AppUser extends BaseEntity {
     private List<RoleUser> roleUser;
 
     @ManyToOne(targetEntity = Room.class)
-    @JoinColumn(name = "roomId")
+    @JoinColumn(name = "room_id")
     private Room roomUser;
 
 }

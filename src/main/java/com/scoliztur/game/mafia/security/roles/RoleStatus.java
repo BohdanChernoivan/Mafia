@@ -1,4 +1,4 @@
-package com.scoliztur.game.mafia.filters.model;
+package com.scoliztur.game.mafia.security.roles;
 
 import lombok.Getter;
 

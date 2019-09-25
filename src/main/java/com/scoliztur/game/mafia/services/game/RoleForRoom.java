@@ -5,7 +5,7 @@ import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
-import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
+import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import java.util.UUID;
 public class RoleForRoom {
 
     private final RoomRepositories roomRepositories;
+    private final PlayerRoleBindingService playerFactory;
     private final List<Player> listOfRole;
 
     public List<Player> getListOfRole() {
@@ -27,56 +28,57 @@ public class RoleForRoom {
     }
 
     @Autowired
-    public RoleForRoom(RoomRepositories roomRepositories, List<Player> ListOfRole) {
+    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory, List<Player> ListOfRole) {
         this.roomRepositories = roomRepositories;
+        this.playerFactory = playerFactory;
         this.listOfRole = ListOfRole;
     }
 
 
     public void addDon(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.DON;
-        listOfRole.add(new RolePlayerFactory().createBlackPlayer(blackPlayers, ""));
+        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addMafia(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.MAFIA;
-        listOfRole.add(new RolePlayerFactory().createBlackPlayer(blackPlayers, ""));
+        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addCourtesan(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.COURTESAN;
-        listOfRole.add(new RolePlayerFactory().createBlackPlayer(blackPlayers, ""));
+        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
     public void addSheriff(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.SHERIFF;
-        listOfRole.add(new RolePlayerFactory().createRedPlayer(redPlayers, ""));
+        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addBarman(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.BARMAN;
-        listOfRole.add(new RolePlayerFactory().createRedPlayer(redPlayers, ""));
+        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addDoctor(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.DOCTOR;
-        listOfRole.add(new RolePlayerFactory().createRedPlayer(redPlayers, ""));
+        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addCivilian(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.CIVILIAN;
-        listOfRole.add(new RolePlayerFactory().createRedPlayer(redPlayers, ""));
+        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
@@ -90,7 +92,7 @@ public class RoleForRoom {
         if(minPlayersInRoom > listOfRole.size()) {
             int notEnoughPlayers = minPlayersInRoom - listOfRole.size();
             for (int i = 0; i < notEnoughPlayers; i++) {
-                listOfRole.add(new RolePlayerFactory().createRedPlayer(RedPlayers.CIVILIAN, ""));
+                listOfRole.add(new PlayerRoleBindingService().createRedPlayer(RedPlayers.CIVILIAN, ""));
             }
         }
 

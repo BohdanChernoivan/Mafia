@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -18,14 +19,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepositories userRepositories;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        AppUser appUser = userRepositories.findUserByUsername(username);
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String login) {
+        AppUser appUser = userRepositories.findUserByLogin(login);
 
         if(appUser == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(login);
         }
 
-        log.info("In loadUserByUsername - appUser: {} loaded by username: {}", appUser, username);
+
+        log.info("In loadUserByUsername - appUser: {} loaded by username: {}", appUser, login);
 
         return new UserPrincipal(appUser);
     }

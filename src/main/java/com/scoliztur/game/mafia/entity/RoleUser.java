@@ -1,17 +1,17 @@
 package com.scoliztur.game.mafia.entity;
 
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "roleUser")
+@Table(name = "role_user")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class RoleUser extends BaseEntity {
 

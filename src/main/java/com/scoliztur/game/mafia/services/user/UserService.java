@@ -4,7 +4,7 @@ import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.entity.RoleUser;
 import com.scoliztur.game.mafia.entity.repositories.RoleRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
-import com.scoliztur.game.mafia.filters.model.RoleStatus;
+import com.scoliztur.game.mafia.security.roles.RoleStatus;
 import com.scoliztur.game.mafia.services.user.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

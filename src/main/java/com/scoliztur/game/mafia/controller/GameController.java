@@ -1,7 +1,6 @@
 package com.scoliztur.game.mafia.controller;
 
-import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
-import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
+import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +14,19 @@ import java.security.Principal;
 public class GameController {
 
     private final CompleteGame game;
-    private final RolePlayerFactory rolePlayerFactory;
+    private final PlayerRoleBindingService playerRoleBindingService;
 
     @Autowired
     public GameController(CompleteGame game) {
         this.game = game;
-        rolePlayerFactory = new RolePlayerFactory();
+        playerRoleBindingService = new PlayerRoleBindingService();
     }
 
     @GetMapping
     public String getRoles(Principal principal) {
         return principal.getName();
 //        game.playerList.insertPlayer(
-//                rolePlayerFactory
+//                playerRoleBindingService
 //                .createBlackPlayer(BlackPlayers.DON, "Pet")
 //        );
     }

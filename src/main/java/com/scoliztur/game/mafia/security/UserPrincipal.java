@@ -1,7 +1,7 @@
 package com.scoliztur.game.mafia.security;
 
 import com.scoliztur.game.mafia.entity.AppUser;
-import com.scoliztur.game.mafia.filters.model.RoleStatus;
+import com.scoliztur.game.mafia.security.roles.RoleStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

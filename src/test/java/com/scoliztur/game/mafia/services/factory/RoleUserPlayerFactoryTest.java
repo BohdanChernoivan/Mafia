@@ -1,9 +1,7 @@
-package com.scoliztur.game.mafia.logic.players.role.factory;
+package com.scoliztur.game.mafia.services.factory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RoleUserPlayerFactoryTest {
 

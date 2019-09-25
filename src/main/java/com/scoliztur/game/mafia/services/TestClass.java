@@ -5,12 +5,10 @@ import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
-import com.scoliztur.game.mafia.logic.players.role.factory.RolePlayerFactory;
+import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TestClass {
     public static void main(String[] args) {
@@ -142,7 +140,7 @@ public class TestClass {
         if(minPlayersInRoom > listOfRole.size()) {
             int notEnoughPlayers = minPlayersInRoom - listOfRole.size();
             for (int i = 0; i < notEnoughPlayers; i++) {
-                listOfRole.add(new RolePlayerFactory().createRedPlayer(RedPlayers.CIVILIAN, ""));
+                listOfRole.add(new PlayerRoleBindingService().createRedPlayer(RedPlayers.CIVILIAN, ""));
             }
         }
 

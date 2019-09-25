@@ -1,11 +1,14 @@
-package com.scoliztur.game.mafia.logic.players.role.factory;
+package com.scoliztur.game.mafia.services.factory;
 
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
+import org.springframework.stereotype.Service;
 
-public class RolePlayerFactory implements CreatorPlayer {
+
+@Service
+public class PlayerRoleBindingService implements CreatorPlayer {
 
     @Override
     public Player createRedPlayer(RedPlayers redPlayer, String name) {
