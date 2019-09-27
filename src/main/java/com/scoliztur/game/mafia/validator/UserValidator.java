@@ -45,9 +45,10 @@ public class UserValidator implements Validator {
             }
         }
 
-        if (userService.findByUsername(appUser.getUsername())!= null) {
+        /*
+        if (userService.findByUsername(appUser.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
-        }
+        }*/
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
         if(appUser.getPassword().length() < 5 || appUser.getPassword().length() > 12) {

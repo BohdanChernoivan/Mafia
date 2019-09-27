@@ -5,11 +5,11 @@ import com.scoliztur.game.mafia.entity.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static com.scoliztur.game.mafia.security.SecurityConstants.*;
 
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -51,9 +52,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
 
-        var user = ((User) authentication.getPrincipal());
+        AppUser user = ((AppUser) authentication.getPrincipal());
 
-        var roles = user.getAuthorities()
+        var roles = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -67,14 +68,26 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setAudience(TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .claim("id", user.getId())
                 .claim("rol", roles)
                 .compact();
 
-        try {
-            response.getWriter().write(token);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            response.getWriter().write(token);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        log.info("token {} ", token);
+
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        try {
+//            response.getWriter().write("{\"" + TOKEN_HEADER + "\":\"" + TOKEN_PREFIX + token + "\"}");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         response.addHeader(TOKEN_HEADER, TOKEN_PREFIX + token);
     }
 }
