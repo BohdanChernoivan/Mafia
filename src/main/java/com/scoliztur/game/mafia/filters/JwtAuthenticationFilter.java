@@ -2,6 +2,7 @@ package com.scoliztur.game.mafia.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoliztur.game.mafia.entity.AppUser;
+import com.scoliztur.game.mafia.security.UserPrincipal;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -35,24 +36,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     // {"username": "name", "password": "pass"}
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            AppUser appUser = new ObjectMapper().readValue(request.getInputStream(), AppUser.class);
+        var username = request.getHeader("login");
+        var password = request.getHeader("password");
+        var authenticationToken = new UsernamePasswordAuthenticationToken(
+                username,
+                password);
 
-            var authenticationToken = new UsernamePasswordAuthenticationToken(
-                    appUser.getUsername(),
-                    appUser.getPassword());
+        return authenticationManager.authenticate(authenticationToken);
 
-            return authenticationManager.authenticate(authenticationToken);
-        } catch (IOException e) {
-            throw new RuntimeException("Request is incorrect");
-        }
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
 
-        AppUser user = ((AppUser) authentication.getPrincipal());
+        UserPrincipal user = (UserPrincipal) authentication
+                .getPrincipal();
 
         var roles = authentication.getAuthorities()
                 .stream()
@@ -68,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setAudience(TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .claim("id", user.getId())
+                .claim("username", user.getUsername())
                 .claim("rol", roles)
                 .compact();
 
