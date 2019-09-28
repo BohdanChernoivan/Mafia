@@ -35,7 +35,7 @@ public class AppUser extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private List<RoleUser> roleUser;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "room_id")
     private Room roomUser;
 

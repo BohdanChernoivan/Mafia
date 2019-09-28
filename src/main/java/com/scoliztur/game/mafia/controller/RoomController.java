@@ -31,7 +31,7 @@ public class RoomController {
 
         AppUser principalUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        AppUser appUser = userRepositories.findUserByUsername(principalUser.getUsername());
+        AppUser appUser = userRepositories.findUserByLogin(principalUser.getUsername());
 
 
         if(nameRoom == null) {
@@ -54,7 +54,7 @@ public class RoomController {
     @PostMapping("/join")
     public String joinRoom(@RequestParam UUID roomId, Principal principal) {
 
-        AppUser appUser = userRepositories.findUserByUsername(principal.getName());
+        AppUser appUser = userRepositories.findUserByLogin(principal.getName());
 
         if(!roomRepositories.existsById(roomId)) {
             throw new RuntimeException("Such a room does not exist");
