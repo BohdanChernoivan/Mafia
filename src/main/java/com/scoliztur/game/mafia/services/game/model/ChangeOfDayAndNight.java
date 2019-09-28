@@ -1,4 +1,4 @@
-package com.scoliztur.game.mafia.services.game;
+package com.scoliztur.game.mafia.services.game.model;
 
 public interface ChangeOfDayAndNight {
 

@@ -1,7 +1,5 @@
 package com.scoliztur.game.mafia.filters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.security.UserPrincipal;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -50,6 +47,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
 
+        log.info("ds {}", authentication.getPrincipal());
+
         UserPrincipal user = (UserPrincipal) authentication
                 .getPrincipal();
 
@@ -70,22 +69,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .claim("username", user.getUsername())
                 .claim("rol", roles)
                 .compact();
-
-//        try {
-//            response.getWriter().write(token);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        log.info("token {} ", token);
-
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        try {
-//            response.getWriter().write("{\"" + TOKEN_HEADER + "\":\"" + TOKEN_PREFIX + token + "\"}");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         response.addHeader(TOKEN_HEADER, TOKEN_PREFIX + token);
     }

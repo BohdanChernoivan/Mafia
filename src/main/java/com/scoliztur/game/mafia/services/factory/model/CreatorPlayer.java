@@ -1,4 +1,4 @@
-package com.scoliztur.game.mafia.services.factory;
+package com.scoliztur.game.mafia.services.factory.model;
 
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;

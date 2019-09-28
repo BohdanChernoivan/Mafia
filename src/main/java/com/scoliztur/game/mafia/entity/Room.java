@@ -6,6 +6,8 @@ import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class Room extends BaseEntity {
+public class Room extends BaseEntity implements Serializable {
 
     @Column(name = "name")
     private String name;
@@ -38,6 +40,10 @@ public class Room extends BaseEntity {
     @Column(name = "players_now")
     private int playersNow;
 
-    @OneToMany(mappedBy = "roomUser", cascade = CascadeType.ALL, targetEntity = AppUser.class)
+    @OneToMany(mappedBy = "roomUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AppUser> appUsers;
+
+    public void addUser(AppUser appUser) {
+        appUser.setRoomUser(this);
+    }
 }

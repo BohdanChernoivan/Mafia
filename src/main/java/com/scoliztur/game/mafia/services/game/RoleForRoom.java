@@ -11,10 +11,7 @@ import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class RoleForRoom {
@@ -27,11 +24,10 @@ public class RoleForRoom {
         return listOfRole;
     }
 
-    @Autowired
-    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory, List<Player> ListOfRole) {
+    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory) {
         this.roomRepositories = roomRepositories;
         this.playerFactory = playerFactory;
-        this.listOfRole = ListOfRole;
+        listOfRole = new ArrayList<>();
     }
 
 
@@ -82,34 +78,34 @@ public class RoleForRoom {
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
-
-    public static PlayerList randomDistributionOfRole(Room room, List<Player> listOfRole) {
+    public PlayerList randomDistributionOfRole(List<String> strings/*Room room, List<Player> listOfRole*/) {
 
         PlayerList cloneList = new PlayerList();
 
-        int minPlayersInRoom = room.getPlayersNow();
+        int minPlayersInRoom = strings.size();
 
         if(minPlayersInRoom > listOfRole.size()) {
             int notEnoughPlayers = minPlayersInRoom - listOfRole.size();
             for (int i = 0; i < notEnoughPlayers; i++) {
-                listOfRole.add(new PlayerRoleBindingService().createRedPlayer(RedPlayers.CIVILIAN, ""));
+                listOfRole.add(playerFactory.createRedPlayer(RedPlayers.CIVILIAN, ""));
             }
         }
 
         Collections.shuffle(listOfRole);
 
         for (Player player : listOfRole) {
-            insertRndUsername(player, room.getAppUsers(), cloneList);
+            insertRndUsername(player, strings, cloneList);
         }
 
         return cloneList;
     }
 
-    private static void insertRndUsername(Player player, List<AppUser> usernameList, PlayerList playerList) {
+    private void insertRndUsername(Player player, List<String> usernameList, PlayerList playerList) {
 
         int rndElementFromListNames = new Random().nextInt(usernameList.size());
-        player.setName(usernameList.get(rndElementFromListNames).getUsername());
+        player.setName(usernameList.get(rndElementFromListNames)/*.getUsername()*/);
         playerList.insertPlayer(player);
         usernameList.remove(usernameList.get(rndElementFromListNames));
     }
+
 }

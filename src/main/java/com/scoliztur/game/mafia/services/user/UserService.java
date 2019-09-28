@@ -62,7 +62,7 @@ public class UserService implements UserModel {
 
         AppUser result = userRepositories.findUserByUsername(username);
 
-        log.info("In findByUsername - user: {} found by username: {}", result, username);
+        log.info("In findUserByUsername - user: {} found by username: {}", result, username);
 
         return result;
     }

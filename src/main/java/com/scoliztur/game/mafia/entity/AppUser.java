@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class AppUser extends BaseEntity {
+public class AppUser extends BaseEntity implements Serializable {
 
     @Column(name = "login", nullable = false, unique = true)
     private String login;
@@ -34,7 +35,7 @@ public class AppUser extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<RoleUser> roleUser;
 
-    @ManyToOne(targetEntity = Room.class)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
     private Room roomUser;
 

@@ -1,13 +1,13 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.AppUser;
-import com.scoliztur.game.mafia.services.user.model.SecurityService;
-import com.scoliztur.game.mafia.validator.UserValidator;
 import com.scoliztur.game.mafia.services.user.UserService;
+import com.scoliztur.game.mafia.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
@@ -22,25 +22,13 @@ public class UserController {
         this.userValidator = new UserValidator();
     }
 
-
-    @PostMapping("/sign_up")
-    public String registration(@RequestBody AppUser appUser, BindingResult bindingResult) {
-
-        userValidator.validate(appUser, bindingResult);
-
-        if(bindingResult.hasErrors()) {
-            return "sign_up";
+    @PostMapping("/registration")
+    public String registration(@RequestBody AppUser appUser) {
+        if(userValidator.validate(appUser)) {
+            userService.register(appUser);
+            return "Welcome " + appUser.getUsername();
+        } else {
+            return "Registration is not valid";
         }
-
-        userService.register(appUser);
-
-        return "welcome";
     }
-    /*redirect:/*/
-
-
-//    @GetMapping(value = {"/", "/welcome"})
-//    public String welcome(Model model) {
-//        return "welcome";
-//    }
 }

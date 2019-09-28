@@ -3,12 +3,14 @@ package com.scoliztur.game.mafia.validator;
 
 import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.services.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-public class UserValidator implements Validator {
+@Slf4j
+public class UserValidator {
 
     // Логин может состоять из букв, цифр, дефисов и подчёркиваний. Длина от 4 до 16 символов.
     private static final String LOGIN = "^[a-zA-Z0-9_-]{4,16}$";
@@ -19,46 +21,23 @@ public class UserValidator implements Validator {
     // Пароль может состоять из любых латинских букв и цифр. Длина от 5 до 12 символов
     private static final String PASSWORD = "^[a-zA-Z0-9]{5,12}$";
 
+    public boolean validate(AppUser appUser) {
 
-    @Autowired
-    private UserService userService;
-
-
-    @Override
-    public boolean supports(Class<?> aClass) {
-        return AppUser.class.equals(aClass);
-    }
-
-    @Override
-    public void validate(Object o, Errors errors) {
-        AppUser appUser = (AppUser) o;
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
-
-        if(!appUser.getLogin().matches(LOGIN)) {
-            errors.rejectValue("login", "Size.userForm.login");
+        if (!appUser.getLogin().matches(LOGIN)) {
+            log.warn("Login must be between 4 and 16 characters. {}", appUser.getLogin());
+            return false;
         }
 
-        if(appUser.getUsername().length() < 3 || appUser.getUsername().length() > 12) {
-            if(!appUser.getUsername().matches(USERNAME)) {
-                errors.rejectValue("username", "Size.userForm.username");
-            }
+        if (!appUser.getUsername().matches(USERNAME)) {
+            log.warn("Username must be between 3 and 12 characters. {}", appUser.getUsername());
+            return false;
         }
 
-        /*
-        if (userService.findByUsername(appUser.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.username");
-        }*/
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
-        if(appUser.getPassword().length() < 5 || appUser.getPassword().length() > 12) {
-            if(!appUser.getPassword().matches(PASSWORD)) {
-                errors.rejectValue("password", "Size.userForm.password");
-            }
+        if (!appUser.getPassword().matches(PASSWORD)) {
+            log.warn("Password must be over 5 characters. {}", appUser.getPassword());
+            return false;
         }
 
-        if(!appUser.getConfirmPassword().equals(appUser.getPassword())) {
-            errors.rejectValue("confirmPassword", "Different.userForm.password");
-        }
+        return true;
     }
 }

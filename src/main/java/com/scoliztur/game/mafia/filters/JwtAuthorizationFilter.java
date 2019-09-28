@@ -1,17 +1,14 @@
 package com.scoliztur.game.mafia.filters;
 
 import com.scoliztur.game.mafia.entity.AppUser;
-import com.scoliztur.game.mafia.entity.RoleUser;
-import com.scoliztur.game.mafia.security.roles.RoleStatus;
-import com.scoliztur.game.mafia.services.user.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,15 +24,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import static com.scoliztur.game.mafia.security.SecurityConstants.*;
 
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
-
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
-
-    @Autowired
-    private UserService userService;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -58,10 +50,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
 
-        log.error("token {}", token);
-
         if (!StringUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
-            log.error("StringUtils");
             try {
                 var signingKey = JWT_SECRET.getBytes();
 
@@ -73,36 +62,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
                         .getBody()
                         .getSubject();
 
-                var login = parsedToken
-                        .getBody()
-                        .get("login")
-                        .toString();
-
                 var authorities = ((List<?>) parsedToken.getBody()
                         .get("rol")).stream()
                         .map(authority -> new SimpleGrantedAuthority((String) authority))
                         .collect(Collectors.toList());
 
-                //userService.findByUsername(username);
+                AppUser appUser = new AppUser();
+                appUser.setUsername(username);
 
-                log.error("JWT AUTHORIZATION FILTER {} ", username);
-
-
-                if (!StringUtils.isEmpty(username)) {
-
-                    AppUser appUser = new AppUser();
-                    appUser.setLogin(login);
-                    appUser.setUsername(username);
-//                   appUser.setPassword(parsedToken.getSignature());
-//                   appUser.setConfirmPassword(parsedToken.getSignature());
-//                   appUser.setRoleUser();
-
-                    return new UsernamePasswordAuthenticationToken(appUser, null, authorities);
-                }
-
-//                return username != null
-//                        ? new UsernamePasswordAuthenticationToken(appUser.getUsername(), null, authorities)
-//                        : null;
+                return username != null
+                        ? new UsernamePasswordAuthenticationToken(appUser, null, authorities)
+                        : null;
 
             } catch (SignatureException exception) {
                 log.warn("JWT signature does not match locally computed signature : {} failed : {}", token, exception.getMessage());
@@ -117,7 +87,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
             }
         }
 
-        log.error("JWT AUTHORIZATION FILTER");
 
         return null;
     }

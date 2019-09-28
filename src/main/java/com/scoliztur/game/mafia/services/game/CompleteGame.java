@@ -3,9 +3,8 @@ package com.scoliztur.game.mafia.services.game;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
+import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
@@ -28,6 +27,10 @@ public class CompleteGame implements ChangeOfDayAndNight {
     @Override
     public boolean isDay() {
         return isDay;
+    }
+
+    public void newPlayerList() {
+        playerList = new PlayerList();
     }
 
     public void newListForMaffiozi() {

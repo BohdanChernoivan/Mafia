@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
+import com.scoliztur.game.mafia.services.factory.model.CreatorPlayer;
 import org.springframework.stereotype.Service;
 
 

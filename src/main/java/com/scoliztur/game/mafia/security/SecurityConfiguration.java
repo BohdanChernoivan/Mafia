@@ -31,11 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user/sign_up").permitAll()
+                .antMatchers("/user/registration").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

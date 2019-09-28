@@ -6,8 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 public enum RoleStatus implements GrantedAuthority {
 
-    PLAYER("PLAYER_USER_ROLE"),
-    LEADING("LEADING_USER_ROLE");
+    PLAYER("PLAYER"),
+    ADMIN("ADMIN");
 
     private String userRole;
 
