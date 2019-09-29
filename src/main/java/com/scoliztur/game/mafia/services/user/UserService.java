@@ -33,7 +33,7 @@ public class UserService implements UserModel {
 
     @Override
     public AppUser register(AppUser appUser) {
-        RoleUser roleUser = roleRepositories.findByName(RoleStatus.PLAYER.name());
+        RoleUser roleUser = roleRepositories.findByName(RoleStatus.USER.name());
         List<RoleUser> userRoleUsers = new ArrayList<>();
         userRoleUsers.add(roleUser);
 

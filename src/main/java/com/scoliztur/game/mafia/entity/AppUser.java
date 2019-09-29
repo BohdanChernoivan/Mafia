@@ -25,18 +25,18 @@ public class AppUser extends BaseEntity implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Transient
-    private String confirmPassword;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
     private List<RoleUser> roleUser;
 
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "room_id")
+    @JoinTable(name = "user_room",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
     private Room roomUser;
 
 }

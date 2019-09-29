@@ -6,17 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 public enum RoleStatus implements GrantedAuthority {
 
-    PLAYER("PLAYER"),
-    ADMIN("ADMIN");
-
-    private String userRole;
-
-    RoleStatus(String userRole) {
-        this.userRole = userRole;
-    }
+    USER,
+    ADMIN;
 
     @Override
     public String getAuthority() {
-        return userRole;
+        return name();
     }
 }

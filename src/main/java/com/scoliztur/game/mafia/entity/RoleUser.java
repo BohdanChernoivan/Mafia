@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "role_user")
+@Table(name = "roles")
 @Getter
 @Setter
 @AllArgsConstructor

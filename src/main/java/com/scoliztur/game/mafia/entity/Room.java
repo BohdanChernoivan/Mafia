@@ -1,5 +1,6 @@
 package com.scoliztur.game.mafia.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
@@ -40,7 +41,7 @@ public class Room extends BaseEntity implements Serializable {
     @Column(name = "players_now")
     private int playersNow;
 
-    @OneToMany(mappedBy = "roomUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "roomUser", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<AppUser> appUsers;
 
     public void addUser(AppUser appUser) {

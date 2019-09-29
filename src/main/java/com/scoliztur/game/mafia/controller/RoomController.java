@@ -29,26 +29,29 @@ public class RoomController {
     @PostMapping("/create")
     public String createRoom(@RequestParam("name_room") String nameRoom, @RequestParam("max_size") int maxSize) {
 
-        AppUser principalUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AppUser appUser = userRepositories.findUserByUsername(
+                ((AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
 
-        AppUser appUser = userRepositories.findUserByLogin(principalUser.getUsername());
+        if(appUser.getRoleUser().size() == 0) {
 
+            if (nameRoom == null) {
+                log.warn("Room has not name");
+                throw new RuntimeException("Write name room");
+            }
 
-        if(nameRoom == null) {
-            log.warn("Room has not name");
-            throw new RuntimeException("Write name room");
+            Room room = new Room();
+
+            room.setPlayersNow(1);
+            room.setName(nameRoom);
+            room.setMaxSizePlayers(maxSize);
+            room.addUser(appUser);
+            roomRepositories.save(room);
+
+            return "Create room. Name -> " + nameRoom;
+
+        } else {
+            return "You in other room";
         }
-
-        Room room = new Room();
-
-        room.setPlayersNow(1);
-        room.setName(nameRoom);
-        room.setMaxSizePlayers(maxSize);
-        room.addUser(appUser);
-        userRepositories.save(appUser);
-        roomRepositories.save(room);
-
-        return "Create room. Name -> " + nameRoom;
     }
 
     @PostMapping("/join")
