@@ -7,7 +7,6 @@ import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.factory.model.CreatorPlayer;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class PlayerRoleBindingService implements CreatorPlayer {
 

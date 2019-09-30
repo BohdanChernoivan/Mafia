@@ -93,13 +93,4 @@ public class RoleController {
             return "Such room does not exist";
         }
     }
-
-//
-//    @PostMapping("/shuffle_role")
-//    public void shuffleAndFillIn(@RequestParam UUID roomId) {
-//        game.playerList = roleForRoom.randomDistributionOfRole(
-//                roomRepositories.getOne(roomId),
-//                roleForRoom.getListOfRole()
-//        );
-//    }
 }

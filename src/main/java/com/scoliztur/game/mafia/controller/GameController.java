@@ -1,17 +1,18 @@
 package com.scoliztur.game.mafia.controller;
 
+import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/game")
@@ -19,7 +20,6 @@ public class GameController {
 
     private final CompleteGame game;
     private final PlayerRoleBindingService playerFactory;
-    private List<Player> listOfRole;
     private final RoleForRoom roleForRoom;
 
     public GameController(CompleteGame game, PlayerRoleBindingService playerFactory, RoleForRoom roleForRoom) {
@@ -28,59 +28,69 @@ public class GameController {
         this.roleForRoom = roleForRoom;
     }
 
-    @GetMapping("/start")
-    public void start() {
-        listOfRole = new ArrayList<>();
-        game.newPlayerList();
-    }
 
     @GetMapping("/add_role")
     public void add() {
 
+        game.newPlayerList();
+
+        game.listOfRole = new ArrayList<>();
+
         BlackPlayers a1 = BlackPlayers.DON;
-        listOfRole.add(playerFactory.createBlackPlayer(a1, ""));
+        game.listOfRole.add(playerFactory.createBlackPlayer(a1, ""));
 
         BlackPlayers a2 = BlackPlayers.COURTESAN;
-        listOfRole.add(playerFactory.createBlackPlayer(a2, ""));
+        game.listOfRole.add(playerFactory.createBlackPlayer(a2, ""));
 
         BlackPlayers a3 = BlackPlayers.MAFIA;
-        listOfRole.add(playerFactory.createBlackPlayer(a3, ""));
+        game.listOfRole.add(playerFactory.createBlackPlayer(a3, ""));
 
         RedPlayers a4 = RedPlayers.CIVILIAN;
-        listOfRole.add(playerFactory.createRedPlayer(a4, ""));
+        game.listOfRole.add(playerFactory.createRedPlayer(a4, ""));
 
         RedPlayers a5 = RedPlayers.DOCTOR;
-        listOfRole.add(playerFactory.createRedPlayer(a5, ""));
+        game.listOfRole.add(playerFactory.createRedPlayer(a5, ""));
 
         RedPlayers a6 = RedPlayers.BARMAN;
-        listOfRole.add(playerFactory.createRedPlayer(a6, ""));
+        game.listOfRole.add(playerFactory.createRedPlayer(a6, ""));
 
         RedPlayers a7 = RedPlayers.SHERIFF;
-        listOfRole.add(playerFactory.createRedPlayer(a7, ""));
+        game.listOfRole.add(playerFactory.createRedPlayer(a7, ""));
     }
 
-    @GetMapping("/shuffle_role")
-    public void shuffleAndFillIn() {
+    @PostMapping("/shuffle_role")
+    public void shuffleAndFillIn(@RequestParam UUID id) {
 
-        List<String> stringList = new ArrayList<>();
+        game.nameOfList = new ArrayList<>();
 
-        stringList.add("a1");
-        stringList.add("a2");
-        stringList.add("a3");
-        stringList.add("a4");
-        stringList.add("a5");
-        stringList.add("a6");
-        stringList.add("a7");
-        stringList.add("a8");
-        stringList.add("a9");
+        game.nameOfList.add("a1");
+        game.nameOfList.add("a2");
+        game.nameOfList.add("a3");
+        game.nameOfList.add("a4");
+        game.nameOfList.add("a5");
+        game.nameOfList.add("a6");
+        game.nameOfList.add("a7");
+        game.nameOfList.add("a8");
+        game.nameOfList.add("a9");
 
 
-        game.playerList = roleForRoom.randomDistributionOfRole(stringList);
+        game.playerList = roleForRoom.randomDistributionOfRole(id);
     }
+
+
 
     @GetMapping("/a1")
-    public String a1() {
-        return game.playerList.getPlayerList().get(1).getName() + " = " + game.playerList.getPlayerList().get(1).toString();
+    public String[] a1() {
+
+        String[] mapView = new String[game.playerList.getPlayerList().size()];
+
+        for (int i = 0; i < mapView.length; i++) {
+            mapView[i] = game.playerList.getPlayerList().get(i).toString() + " = " + game.playerList.getPlayerList().get(i).getName();
+        }
+        String[] map = mapView;
+
+        return map;
+//        return game.playerList.getPlayerList().get(1).getName() + " = " + game.playerList.getPlayerList().get(1).toString();
     }
 
     @GetMapping("/a2")

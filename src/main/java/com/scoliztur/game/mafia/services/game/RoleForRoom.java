@@ -1,6 +1,5 @@
 package com.scoliztur.game.mafia.services.game;
 
-import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
@@ -8,7 +7,6 @@ import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,83 +16,86 @@ public class RoleForRoom {
 
     private final RoomRepositories roomRepositories;
     private final PlayerRoleBindingService playerFactory;
-    private final List<Player> listOfRole;
+    private final CompleteGame completeGame;
 
-    public List<Player> getListOfRole() {
-        return listOfRole;
-    }
 
-    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory) {
+    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory, CompleteGame completeGame) {
         this.roomRepositories = roomRepositories;
         this.playerFactory = playerFactory;
-        listOfRole = new ArrayList<>();
+        this.completeGame = completeGame;
     }
 
 
     public void addDon(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.DON;
-        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addMafia(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.MAFIA;
-        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addCourtesan(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.COURTESAN;
-        listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
         roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
     public void addSheriff(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.SHERIFF;
-        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addBarman(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.BARMAN;
-        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addDoctor(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.DOCTOR;
-        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addCivilian(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.CIVILIAN;
-        listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
+        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
         roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
-    public PlayerList randomDistributionOfRole(List<String> strings/*Room room, List<Player> listOfRole*/) {
+    public PlayerList randomDistributionOfRole(UUID id) {
 
         PlayerList cloneList = new PlayerList();
 
-        int minPlayersInRoom = strings.size();
+        /*Room room = roomRepositories.getOne(id);*/
 
-        if(minPlayersInRoom > listOfRole.size()) {
-            int notEnoughPlayers = minPlayersInRoom - listOfRole.size();
-            for (int i = 0; i < notEnoughPlayers; i++) {
-                listOfRole.add(playerFactory.createRedPlayer(RedPlayers.CIVILIAN, ""));
+        int minPlayersInRoom = 5/*room.getMinSizePlayers()*/;
+
+        if(minPlayersInRoom <= completeGame.nameOfList.size()) {
+            if(completeGame.nameOfList.size() > completeGame.listOfRole.size()) {
+                int notEnoughPlayers = completeGame.nameOfList.size() - completeGame.listOfRole.size();
+                for (int i = 0; i < notEnoughPlayers; i++) {
+                    completeGame.listOfRole.add(playerFactory.createRedPlayer(RedPlayers.CIVILIAN, ""));
+                }
             }
+        } else {
+            throw new RuntimeException("Not enough players");
         }
 
-        Collections.shuffle(listOfRole);
+        Collections.shuffle(completeGame.listOfRole);
 
-        for (Player player : listOfRole) {
-            insertRndUsername(player, strings, cloneList);
+        for (Player player : completeGame.listOfRole) {
+            insertRndUsername(player, completeGame.nameOfList, cloneList);
         }
 
         return cloneList;
@@ -103,7 +104,7 @@ public class RoleForRoom {
     private void insertRndUsername(Player player, List<String> usernameList, PlayerList playerList) {
 
         int rndElementFromListNames = new Random().nextInt(usernameList.size());
-        player.setName(usernameList.get(rndElementFromListNames)/*.getUsername()*/);
+        player.setName(usernameList.get(rndElementFromListNames));
         playerList.insertPlayer(player);
         usernameList.remove(usernameList.get(rndElementFromListNames));
     }

@@ -47,4 +47,8 @@ public class Room extends BaseEntity implements Serializable {
     public void addUser(AppUser appUser) {
         appUser.setRoomUser(this);
     }
+
+    public void addPlayerNow() {
+        playersNow++;
+    }
 }

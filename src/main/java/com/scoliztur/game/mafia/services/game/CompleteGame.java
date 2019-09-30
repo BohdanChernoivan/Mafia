@@ -3,13 +3,22 @@ package com.scoliztur.game.mafia.services.game;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
+import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
 
-    public PlayerList playerList;
+    public List<String> nameOfList;
+    public List<Player> listOfRole;
+    public PlayerList playerList = new PlayerList();
     public OfferForKilling listForMafia;
     public OfferForKilling listForCivilian;
     private boolean isDay;
