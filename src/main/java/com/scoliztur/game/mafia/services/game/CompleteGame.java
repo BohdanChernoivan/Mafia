@@ -58,4 +58,36 @@ public class CompleteGame implements ChangeOfDayAndNight {
         Murder.killFromSelected(listForMafia, playerList);
     }
 
+    public String[] viewLinePlayer() {
+        String[] view = new String[playerList.getPlayerList().size()];
+
+        for (int i = 0; i < view.length; i++) {
+            view[i] = "Player [" + i + "], name " + playerList.getPlayerList().get(i).toString() + " = "
+                    + playerList.getPlayerList().get(i).getName();
+        }
+
+        return view;
+    }
+
+    public String[] viewListMafia() {
+        String[] view = new String[listForMafia.getPlayerList().size()];
+
+        for (int i = 0; i < view.length; i++) {
+            view[i] = "Player [" + i + "], name " + listForMafia.getPlayerList().get(i).toString() + " = "
+                    + listForMafia.getPlayerList().get(i).getName();
+        }
+
+        return view;
+    }
+
+    public String[] viewListCivilian() {
+        String[] view = new String[listForCivilian.getPlayerList().size()];
+
+        for (int i = 0; i < view.length; i++) {
+            view[i] = "Player [" + i + "], name " + listForCivilian.getPlayerList().get(i).toString() + " = "
+                    + listForCivilian.getPlayerList().get(i).getName();
+        }
+
+        return view;
+    }
 }

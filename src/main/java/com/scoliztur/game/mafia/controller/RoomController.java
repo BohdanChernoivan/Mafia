@@ -103,6 +103,7 @@ public class RoomController {
                 || room.getPlayersNow() >= room.getMinSizePlayers()) {
             game.newPlayerList();
             game.playerList = roleForRoom.randomDistributionOfRole(roomId);
+            game.newListForCivilian();
             game.nameOfList = null;
             game.listOfRole = null;
             return "Start game in room -> " + room.getName();

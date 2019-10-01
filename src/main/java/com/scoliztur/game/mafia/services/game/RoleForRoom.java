@@ -29,48 +29,48 @@ public class RoleForRoom {
     public void addDon(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.DON;
         completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
+//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addMafia(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.MAFIA;
         completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
+//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
 
     public void addCourtesan(UUID roomId) {
         BlackPlayers blackPlayers = BlackPlayers.COURTESAN;
         completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
+//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
     }
 
     public void addSheriff(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.SHERIFF;
         completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
+//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addBarman(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.BARMAN;
         completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
+//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addDoctor(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.DOCTOR;
         completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
+//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
 
     public void addCivilian(UUID roomId) {
         RedPlayers redPlayers = RedPlayers.CIVILIAN;
         completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
+//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
     }
 
     public PlayerList randomDistributionOfRole(UUID id) {

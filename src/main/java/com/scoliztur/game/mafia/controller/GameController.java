@@ -1,65 +1,127 @@
 package com.scoliztur.game.mafia.controller;
 
-import com.scoliztur.game.mafia.logic.players.PlayerList;
-import com.scoliztur.game.mafia.logic.players.basic.Player;
-import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
-import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
-import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
+
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/game")
+@Slf4j
 public class GameController {
 
     private final CompleteGame game;
-    private final PlayerRoleBindingService playerFactory;
     private final RoleForRoom roleForRoom;
+    private int countPlayer;
 
-    public GameController(CompleteGame game, PlayerRoleBindingService playerFactory, RoleForRoom roleForRoom) {
+    public GameController(CompleteGame game, RoleForRoom roleForRoom) {
         this.game = game;
-        this.playerFactory = playerFactory;
         this.roleForRoom = roleForRoom;
     }
 
-
     @GetMapping("/add_role")
     public void add() {
-
         game.newPlayerList();
-
+        game.newListForCivilian();
         game.listOfRole = new ArrayList<>();
-
-        BlackPlayers a1 = BlackPlayers.DON;
-        game.listOfRole.add(playerFactory.createBlackPlayer(a1, ""));
-
-        BlackPlayers a2 = BlackPlayers.COURTESAN;
-        game.listOfRole.add(playerFactory.createBlackPlayer(a2, ""));
-
-        BlackPlayers a3 = BlackPlayers.MAFIA;
-        game.listOfRole.add(playerFactory.createBlackPlayer(a3, ""));
-
-        RedPlayers a4 = RedPlayers.CIVILIAN;
-        game.listOfRole.add(playerFactory.createRedPlayer(a4, ""));
-
-        RedPlayers a5 = RedPlayers.DOCTOR;
-        game.listOfRole.add(playerFactory.createRedPlayer(a5, ""));
-
-        RedPlayers a6 = RedPlayers.BARMAN;
-        game.listOfRole.add(playerFactory.createRedPlayer(a6, ""));
-
-        RedPlayers a7 = RedPlayers.SHERIFF;
-        game.listOfRole.add(playerFactory.createRedPlayer(a7, ""));
     }
+
+    //TODO countPlayer = -1
+    @GetMapping("/day")
+    public String day() {
+        game.day();
+        countPlayer = 0;
+        return "day";
+    }
+
+    @PostMapping("/pick")
+    public void start(@RequestParam("player") int numberPlayer) {
+
+            if (game.playerList.getPlayerList().get(numberPlayer) != null) {
+                countPlayer++;
+                if (game.playerList.getPlayerList().get(countPlayer) != null) {
+                    game.playerList.getPlayerList().get(countPlayer)
+                            .pick(game.listForCivilian, game.playerList.getPlayerList().get(numberPlayer), game.isDay());
+
+                    log.info("{} picks {}", game.playerList.getPlayerList().get(countPlayer).getName(),
+                            game.playerList.getPlayerList().get(numberPlayer).getName());
+                } else {
+                    throw new RuntimeException("Such player none");
+                }
+            } else {
+                throw new RuntimeException("No choice");
+//            else
+//            log.info("Player does not pick anyone");
+        }
+    }
+
+    @GetMapping("/votes")
+    public String[] votes() {
+        countPlayer = 0;
+        return viewListCivilian();
+    }
+
+    //TODO
+    @PostMapping("/vote")
+    public void vote(@RequestParam("player") int numberPlayer) {
+
+            if (game.listForCivilian.getPlayerList().get(numberPlayer) != null) {
+                countPlayer++;
+                if (game.playerList.getPlayerList().get(countPlayer) != null) {
+                    game.playerList.getPlayerList().get(countPlayer)
+                            .vote(game.listForCivilian, game.listForCivilian.getPlayerList().get(numberPlayer), game.isDay());
+
+                    log.info("{} voted for {}", game.listForCivilian.getPlayerList().get(countPlayer).getName(),
+                            game.listForCivilian.getPlayerList().get(numberPlayer).getName());
+                } else {
+                    throw new RuntimeException("Such player none");
+                }
+            } else {
+                throw new RuntimeException("No choice");
+            /*countPlayer++;
+            log.info("Player does not vote");*/
+        }
+    }
+
+    @GetMapping("/night")
+    public String night() {
+        game.night();
+        countPlayer = 0;
+        return "night";
+    }
+
+//    public void barman() {
+//
+//    }
+//
+//    public void courtesan() {
+//
+//    }
+//
+//    public void mafia() {
+//
+//    }
+//
+//    public void sheriff() {
+//
+//    }
+//
+//    public void don() {
+//
+//    }
+//
+//    public void doctor() {
+//
+//    }
+
+
 
     @PostMapping("/shuffle_role")
     public void shuffleAndFillIn(@RequestParam UUID id) {
+
 
         game.nameOfList = new ArrayList<>();
 
@@ -73,63 +135,23 @@ public class GameController {
         game.nameOfList.add("a8");
         game.nameOfList.add("a9");
 
-
         game.playerList = roleForRoom.randomDistributionOfRole(id);
     }
 
 
 
-    @GetMapping("/a1")
-    public String[] a1() {
-
-        String[] mapView = new String[game.playerList.getPlayerList().size()];
-
-        for (int i = 0; i < mapView.length; i++) {
-            mapView[i] = game.playerList.getPlayerList().get(i).toString() + " = " + game.playerList.getPlayerList().get(i).getName();
-        }
-        String[] map = mapView;
-
-        return map;
-//        return game.playerList.getPlayerList().get(1).getName() + " = " + game.playerList.getPlayerList().get(1).toString();
+    @GetMapping("/view/players")
+    public String[] viewPlayers() {
+        return game.viewLinePlayer();
     }
 
-    @GetMapping("/a2")
-    public String a2() {
-        return game.playerList.getPlayerList().get(2).getName() + " = " + game.playerList.getPlayerList().get(2).toString();
+    @GetMapping("/view/vote/mafia")
+    public String[] viewListMafia() {
+        return game.viewListMafia();
     }
 
-    @GetMapping("/a3")
-    public String a3() {
-        return game.playerList.getPlayerList().get(3).getName() + " = " + game.playerList.getPlayerList().get(3).toString();
-    }
-
-    @GetMapping("/a4")
-    public String a4() {
-        return game.playerList.getPlayerList().get(4).getName() + " = " + game.playerList.getPlayerList().get(4).toString();
-    }
-
-    @GetMapping("/a5")
-    public String a5() {
-        return game.playerList.getPlayerList().get(5).getName() + " = " + game.playerList.getPlayerList().get(5).toString();
-    }
-
-    @GetMapping("/a6")
-    public String a6() {
-        return game.playerList.getPlayerList().get(6).getName() + " = " + game.playerList.getPlayerList().get(6).toString();
-    }
-
-    @GetMapping("/a7")
-    public String a7() {
-        return game.playerList.getPlayerList().get(7).getName() + " = " + game.playerList.getPlayerList().get(7).toString();
-    }
-
-    @GetMapping("/a8")
-    public String a8() {
-        return game.playerList.getPlayerList().get(8).getName() + " = " + game.playerList.getPlayerList().get(8).toString();
-    }
-
-    @GetMapping("/a9")
-    public String a9() {
-        return game.playerList.getPlayerList().get(9).getName() + " = " + game.playerList.getPlayerList().get(9).toString();
+    @GetMapping("/view/vote/civilian")
+    public String[] viewListCivilian() {
+        return game.viewListCivilian();
     }
 }
