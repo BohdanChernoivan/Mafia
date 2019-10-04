@@ -22,15 +22,23 @@ public abstract class Player {
         this.isAlive = true;
     }
 
-    public void pick(OfferForKilling offered, Player player, boolean day) {
+    public String pick(OfferForKilling offered, Player player, boolean day) {
         if(day) {
             if (this.isActionDay) {
-                offered.addPlayer(player);
+                return offered.addPlayer(player);
+            } else {
+                return "You not active";
             }
+        } else {
+            return "Now night";
         }
     }
 
     public abstract String action(Player player, boolean isActionDay);
+
+    public String additionalAction(Player player, boolean day, OfferForKilling offerForKilling) {
+        return "additional";
+    }
 
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
         if(day) {

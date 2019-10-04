@@ -77,9 +77,9 @@ public class RoleForRoom {
 
         PlayerList cloneList = new PlayerList();
 
-        /*Room room = roomRepositories.getOne(id);*/
+        Room room = roomRepositories.getOne(id);
 
-        int minPlayersInRoom = 5/*room.getMinSizePlayers()*/;
+        int minPlayersInRoom = room.getMinSizePlayers();
 
         if(minPlayersInRoom <= completeGame.nameOfList.size()) {
             if(completeGame.nameOfList.size() > completeGame.listOfRole.size()) {

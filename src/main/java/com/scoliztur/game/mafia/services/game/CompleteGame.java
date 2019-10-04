@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
+import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class CompleteGame implements ChangeOfDayAndNight {
         playerList = new PlayerList();
     }
 
-    public void newListForMaffiozi() {
+    public void newListForMafia() {
         listForMafia = new OfferForKilling();
     }
 
@@ -49,12 +50,12 @@ public class CompleteGame implements ChangeOfDayAndNight {
         listForCivilian = new OfferForKilling();
     }
 
-    public void murderDay() {
-        murder.killFromSelected(listForCivilian, playerList);
+    public String murderDay() {
+        return murder.killFromSelected(listForCivilian, playerList);
     }
 
-    public void murderNightForMaffiozi() {
-        murder.killFromSelected(listForMafia, playerList);
+    public String murderNightForMafia() {
+        return murder.killFromSelected(listForMafia, playerList);
     }
 
 
@@ -69,36 +70,51 @@ public class CompleteGame implements ChangeOfDayAndNight {
         return stringList;
     }
 
-    public String pickSelectionOrder(int numberPlayer) {
+    public String pickPlayerSelectionOrder(int numberPlayer) {
 
-        if (playerList.getPlayerList().get(numberPlayer) != null) {
+        if (playerList.getPlayerList().get(countPlayer) != null) {
             countPlayer++;
-            if (playerList.getPlayerList().get(countPlayer) != null) {
+            if (playerList.getPlayerList().get(numberPlayer) != null) {
                 playerList.getPlayerList().get(countPlayer)
                         .pick(listForCivilian, playerList.getPlayerList().get(numberPlayer), isDay());
 
                 return playerList.getPlayerList().get(countPlayer).getName() + " picks " +
                         playerList.getPlayerList().get(numberPlayer).getName();
+            } else {
+                countPlayer++;
+                return "Player does not pick anyone";
             }
+        } else {
             return "Such player none";
         }
-        return "Player does not pick anyone";
     }
 
-    public String voteSelectionOrder(int numberPlayer) {
+    public String vote(int thisNumberPlayer, int numberPlayer) {
 
-        if (listForCivilian.getPlayerList().get(numberPlayer) != null) {
-            countPlayer++;
-            if (playerList.getPlayerList().get(countPlayer) != null) {
-                playerList.getPlayerList().get(countPlayer)
-                        .vote(listForCivilian, listForCivilian.getPlayerList().get(numberPlayer), isDay());
+        Player player = playerList.getPlayerList().get(thisNumberPlayer);
 
-                return playerList.getPlayerList().get(countPlayer).getName() + " voted for " +
-                        listForCivilian.getPlayerList().get(numberPlayer).getName();
+        if (player != null) {
+            if (playerList.getPlayerList().get(numberPlayer) != null) {
+                return player.vote(listForCivilian, listForCivilian.getPlayerList().get(numberPlayer), isDay());
+            } else {
+                return "Such player none";
             }
-            return "Such player none";
+        } else {
+            return "Player does not vote";
         }
-        return "Player does not voteSelectionOrder";
+    }
+
+
+    public String actionPlayerNight(int thisNumberPlayer, int numberPlayer) {
+
+        Player player = playerList.getPlayerList().get(thisNumberPlayer);
+
+        if(player.toString().equals(BlackPlayers.MAFIA.getNameRole())) {
+            player.action(playerList.getPlayerList().get(numberPlayer), isDay());
+            return player.additionalAction(playerList.getPlayerList().get(numberPlayer), isDay(), listForMafia);
+        } else {
+            return player.action(playerList.getPlayerList().get(numberPlayer), isDay());
+        }
 
     }
 }

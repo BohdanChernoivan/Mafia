@@ -15,7 +15,8 @@ public class Mafia extends Player {
         return null;
     }
 
-    public String offerKillNight(Player player, boolean day, OfferForKilling offerForKilling) {
+    @Override
+    public String additionalAction(Player player, boolean day, OfferForKilling offerForKilling) {
         if (this.isActionNight() && !day) {
             offerForKilling.addPlayer(player);
             return player.getName() + " want to kill Mafia";

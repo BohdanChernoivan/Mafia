@@ -23,7 +23,7 @@ public class Sheriff extends Player {
         } else if (day) {
             return "Now day";
         }
-        return getName() + " not found Mafia";
+        return this.toString() + " not found Mafia";
     }
 
 

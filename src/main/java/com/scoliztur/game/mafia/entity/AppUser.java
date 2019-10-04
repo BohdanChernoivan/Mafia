@@ -4,7 +4,6 @@ import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Entity

@@ -15,10 +15,11 @@ public class OfferForKilling {
         playerVoiceMap = new LinkedHashMap<>();
     }
 
-    public void addPlayer(Player player) {
+    public String addPlayer(Player player) {
 
         byte zeroVotes = 0;
         playerVoiceMap.put(player, zeroVotes);
+        return player.getName();
     }
 
     public List<Player> getPlayerList() {

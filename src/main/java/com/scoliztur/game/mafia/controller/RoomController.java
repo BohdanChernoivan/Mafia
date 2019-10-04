@@ -6,7 +6,6 @@ import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -3,7 +3,6 @@ package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/game")
-@Slf4j
 public class GameController {
 
     private final CompleteGame game;
@@ -22,7 +20,7 @@ public class GameController {
         this.roleForRoom = roleForRoom;
     }
 
-    @GetMapping("/shuffle_role")
+    @PostMapping("/shuffle_role")
     public void add(@RequestParam("id") UUID roomId) {
         game.playerList = roleForRoom.randomDistributionOfRole(roomId);
     }
@@ -32,82 +30,45 @@ public class GameController {
         game.day();
         game.newListForCivilian();
         game.countPlayer = -1;
+        if(game.listForMafia != null) {
+            return ResponseEntity.ok("day" + "\n" + game.murderNightForMafia());
+
+        }
         return ResponseEntity.ok("day");
     }
 
     @PostMapping("/pick")
     public ResponseEntity pick(@RequestParam("player") int numberPlayer) {
-        return ResponseEntity.ok(game.pickSelectionOrder(numberPlayer));
+        return ResponseEntity.ok(game.pickPlayerSelectionOrder(numberPlayer));
     }
 
     @GetMapping("/votes")
     public List<String> votes() {
-        game.countPlayer = -1;
         return viewListCivilian();
     }
 
 
     @PostMapping("/vote")
-    public ResponseEntity vote(@RequestParam("player") int numberPlayer) {
-         return ResponseEntity.ok(game.voteSelectionOrder(numberPlayer));
+    public ResponseEntity vote(@RequestParam("this_player") int thisNumberPlayer,
+                               @RequestParam("player") int numberPlayer) {
+         return ResponseEntity.ok(game.vote(thisNumberPlayer, numberPlayer));
     }
 
     @GetMapping("/night")
     public ResponseEntity night() {
+        game.newListForMafia();
         game.night();
-        game.newListForMaffiozi();
-        game.countPlayer = -1;
+        if(game.listForCivilian != null) {
+            return ResponseEntity.ok("night" + "\n" +  game.murderDay());
+        }
         return ResponseEntity.ok("night");
     }
 
-    @PostMapping
-    public void barman(@RequestParam("player") int numberPlayer) {
-
-
-
+    @PostMapping("/action")
+    public ResponseEntity actionPlayer(@RequestParam("this_player") int thisNumberPlayer,
+                                       @RequestParam("player") int numberPlayer) {
+        return ResponseEntity.ok().body(game.actionPlayerNight(thisNumberPlayer, numberPlayer));
     }
-//
-//    public void courtesan() {
-//
-//    }
-//
-//    public void mafia() {
-//
-//    }
-//
-//    public void sheriff() {
-//
-//    }
-//
-//    public void don() {
-//
-//    }
-//
-//    public void doctor() {
-//
-//    }
-
-
-
-    @PostMapping("/shuffle_role")
-    public void shuffleAndFillIn(@RequestParam UUID id) {
-
-
-        game.nameOfList = new ArrayList<>();
-
-        game.nameOfList.add("a1");
-        game.nameOfList.add("a2");
-        game.nameOfList.add("a3");
-        game.nameOfList.add("a4");
-        game.nameOfList.add("a5");
-        game.nameOfList.add("a6");
-        game.nameOfList.add("a7");
-        game.nameOfList.add("a8");
-        game.nameOfList.add("a9");
-
-        game.playerList = roleForRoom.randomDistributionOfRole(id);
-    }
-
 
 
     @GetMapping("/view/players")

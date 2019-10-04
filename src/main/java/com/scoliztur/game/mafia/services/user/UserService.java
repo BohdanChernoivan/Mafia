@@ -60,7 +60,7 @@ public class UserService implements UserModel {
     @Override
     public AppUser findByUsername(String username) {
 
-        AppUser result = userRepositories.findUserByLogin(username);
+        AppUser result = userRepositories.findUserByUsername(username);
 
         log.info("In findUserByLogin - user: {} found by username: {}", result, username);
 

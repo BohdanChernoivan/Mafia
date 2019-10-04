@@ -1,14 +1,11 @@
 package com.scoliztur.game.mafia.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
