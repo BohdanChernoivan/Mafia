@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class Room extends BaseEntity implements Serializable {
+public class Room extends BaseEntity {
 
     @Column(name = "name")
     private String name;

@@ -9,7 +9,8 @@ public class Doctor extends Player {
         super(name);
     }
 
-    public String resurrect(Player player, boolean day) {
+    @Override
+    public String action(Player player, boolean day) {
         if (this.isActionNight() && !day) {
             player.setAlive(true);
             return player.getName() + " resurrected";

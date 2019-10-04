@@ -4,6 +4,7 @@ package com.scoliztur.game.mafia.controller;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,87 +16,56 @@ public class GameController {
 
     private final CompleteGame game;
     private final RoleForRoom roleForRoom;
-    private int countPlayer;
 
     public GameController(CompleteGame game, RoleForRoom roleForRoom) {
         this.game = game;
         this.roleForRoom = roleForRoom;
     }
 
-    @GetMapping("/add_role")
-    public void add() {
-        game.newPlayerList();
-        game.newListForCivilian();
-        game.listOfRole = new ArrayList<>();
+    @GetMapping("/shuffle_role")
+    public void add(@RequestParam("id") UUID roomId) {
+        game.playerList = roleForRoom.randomDistributionOfRole(roomId);
     }
 
-    //TODO countPlayer = -1
     @GetMapping("/day")
-    public String day() {
+    public ResponseEntity day() {
         game.day();
-        countPlayer = 0;
-        return "day";
+        game.newListForCivilian();
+        game.countPlayer = -1;
+        return ResponseEntity.ok("day");
     }
 
     @PostMapping("/pick")
-    public void start(@RequestParam("player") int numberPlayer) {
-
-            if (game.playerList.getPlayerList().get(numberPlayer) != null) {
-                countPlayer++;
-                if (game.playerList.getPlayerList().get(countPlayer) != null) {
-                    game.playerList.getPlayerList().get(countPlayer)
-                            .pick(game.listForCivilian, game.playerList.getPlayerList().get(numberPlayer), game.isDay());
-
-                    log.info("{} picks {}", game.playerList.getPlayerList().get(countPlayer).getName(),
-                            game.playerList.getPlayerList().get(numberPlayer).getName());
-                } else {
-                    throw new RuntimeException("Such player none");
-                }
-            } else {
-                throw new RuntimeException("No choice");
-//            else
-//            log.info("Player does not pick anyone");
-        }
+    public ResponseEntity pick(@RequestParam("player") int numberPlayer) {
+        return ResponseEntity.ok(game.pickSelectionOrder(numberPlayer));
     }
 
     @GetMapping("/votes")
-    public String[] votes() {
-        countPlayer = 0;
+    public List<String> votes() {
+        game.countPlayer = -1;
         return viewListCivilian();
     }
 
-    //TODO
+
     @PostMapping("/vote")
-    public void vote(@RequestParam("player") int numberPlayer) {
-
-            if (game.listForCivilian.getPlayerList().get(numberPlayer) != null) {
-                countPlayer++;
-                if (game.playerList.getPlayerList().get(countPlayer) != null) {
-                    game.playerList.getPlayerList().get(countPlayer)
-                            .vote(game.listForCivilian, game.listForCivilian.getPlayerList().get(numberPlayer), game.isDay());
-
-                    log.info("{} voted for {}", game.listForCivilian.getPlayerList().get(countPlayer).getName(),
-                            game.listForCivilian.getPlayerList().get(numberPlayer).getName());
-                } else {
-                    throw new RuntimeException("Such player none");
-                }
-            } else {
-                throw new RuntimeException("No choice");
-            /*countPlayer++;
-            log.info("Player does not vote");*/
-        }
+    public ResponseEntity vote(@RequestParam("player") int numberPlayer) {
+         return ResponseEntity.ok(game.voteSelectionOrder(numberPlayer));
     }
 
     @GetMapping("/night")
-    public String night() {
+    public ResponseEntity night() {
         game.night();
-        countPlayer = 0;
-        return "night";
+        game.newListForMaffiozi();
+        game.countPlayer = -1;
+        return ResponseEntity.ok("night");
     }
 
-//    public void barman() {
-//
-//    }
+    @PostMapping
+    public void barman(@RequestParam("player") int numberPlayer) {
+
+
+
+    }
 //
 //    public void courtesan() {
 //
@@ -141,17 +111,18 @@ public class GameController {
 
 
     @GetMapping("/view/players")
-    public String[] viewPlayers() {
-        return game.viewLinePlayer();
+    public List<String> viewPlayers() {
+        return game.viewOrderPlayerList(game.playerList.getPlayerList());
     }
 
-    @GetMapping("/view/vote/mafia")
-    public String[] viewListMafia() {
-        return game.viewListMafia();
+    @GetMapping("/view/vote_selection_order/mafia")
+    public List<String> viewListMafia() {
+        return game.viewOrderPlayerList(game.listForMafia.getPlayerList());
     }
 
-    @GetMapping("/view/vote/civilian")
-    public String[] viewListCivilian() {
-        return game.viewListCivilian();
+    @GetMapping("/view/vote_selection_order/civilian")
+    public List<String> viewListCivilian() {
+        return game.viewOrderPlayerList(game.listForCivilian.getPlayerList());
     }
+
 }

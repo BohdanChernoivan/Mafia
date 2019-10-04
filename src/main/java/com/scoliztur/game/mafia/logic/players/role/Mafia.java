@@ -10,6 +10,11 @@ public class Mafia extends Player {
         super(name);
     }
 
+    @Override
+    public String action(Player player, boolean isActionDay) {
+        return null;
+    }
+
     public String offerKillNight(Player player, boolean day, OfferForKilling offerForKilling) {
         if (this.isActionNight() && !day) {
             offerForKilling.addPlayer(player);

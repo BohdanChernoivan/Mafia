@@ -21,6 +21,8 @@ public class UserValidator {
     // Пароль может состоять из любых латинских букв и цифр. Длина от 5 до 12 символов
     private static final String PASSWORD = "^[a-zA-Z0-9]{5,12}$";
 
+
+    // Validator (statics)
     public boolean validate(AppUser appUser) {
 
         if (!appUser.getLogin().matches(LOGIN)) {

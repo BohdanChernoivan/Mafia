@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class AppUser extends BaseEntity implements Serializable {
+public class AppUser extends BaseEntity {
 
     @Column(name = "login", nullable = false, unique = true)
     private String login;

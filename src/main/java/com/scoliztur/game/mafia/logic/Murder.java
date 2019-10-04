@@ -5,12 +5,12 @@ import com.scoliztur.game.mafia.logic.players.basic.Player;
 
 import java.util.Map;
 
-public final class Murder {
+public class Murder {
 
-    public static String killFromSelected(OfferForKilling playerMap, PlayerList playerList) {
+    public String killFromSelected(OfferForKilling playerMap, PlayerList playerList) {
         Map.Entry<Player, Byte> mapForKilledPlayer = null;
 
-        for (Map.Entry<Player, Byte> entry : playerMap.getPlayerByteMap().entrySet()) {
+        for (Map.Entry<Player, Byte> entry : playerMap.getPlayerVoiceMap().entrySet()) {
             if(mapForKilledPlayer == null || entry.getValue().compareTo(mapForKilledPlayer.getValue()) > 0) {
                 mapForKilledPlayer = entry;
             }

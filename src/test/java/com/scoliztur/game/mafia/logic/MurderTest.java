@@ -15,10 +15,12 @@ class MurderTest {
     private Sheriff sheriff;
     private Don don;
     private Civilian civilian;
+    private Murder murder;
 
 
     @BeforeEach
     void setUp() {
+        murder = new Murder();
         civilian = new Civilian("Lola");
         sheriff = new Sheriff("Big");
         don = new Don("Dick");
@@ -37,7 +39,7 @@ class MurderTest {
     @Test
     void killFromSelected() {
         offerForKilling.addPlayer(civilian);
-        Murder.killFromSelected(offerForKilling, playerList);
+        murder.killFromSelected(offerForKilling, playerList);
         assertEquals(playerList.getPlayerList().size(), 4);
     }
 }

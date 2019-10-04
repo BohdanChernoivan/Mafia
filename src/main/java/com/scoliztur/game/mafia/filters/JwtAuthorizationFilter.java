@@ -1,6 +1,7 @@
 package com.scoliztur.game.mafia.filters;
 
 import com.scoliztur.game.mafia.entity.AppUser;
+import com.scoliztur.game.mafia.security.UserPrincipal;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -70,8 +71,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
                 AppUser appUser = new AppUser();
                 appUser.setUsername(username);
 
+                UserPrincipal appDetails = new UserPrincipal(appUser);
+
                 return username != null
-                        ? new UsernamePasswordAuthenticationToken(appUser, null, authorities)
+                        ? new UsernamePasswordAuthenticationToken(appDetails, null, authorities)
                         : null;
 
             } catch (SignatureException exception) {

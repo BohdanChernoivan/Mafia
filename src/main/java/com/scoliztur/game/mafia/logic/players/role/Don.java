@@ -10,7 +10,8 @@ public class Don extends Mafia {
         super(name);
     }
 
-    public String findSheriff(Player player, boolean day) {
+    @Override
+    public String action(Player player, boolean day) {
         if (this.isActionNight() && !day) {
             if (player.toString().equals(RedPlayers.SHERIFF.getNameRole())) {
                 return this.toString() + " found Sheriff";

@@ -10,6 +10,11 @@ public class Civilian extends Player {
     }
 
     @Override
+    public String action(Player player, boolean isActionDay) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return RedPlayers.CIVILIAN.getNameRole();
     }

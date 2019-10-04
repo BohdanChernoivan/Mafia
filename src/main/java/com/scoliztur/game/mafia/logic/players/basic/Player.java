@@ -30,9 +30,11 @@ public abstract class Player {
         }
     }
 
+    public abstract String action(Player player, boolean isActionDay);
+
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
         if(day) {
-            for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerByteMap().entrySet()) {
+            for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerVoiceMap().entrySet()) {
                 if (entry.getKey() == player) {
                     entry.setValue((byte) (entry.getValue() + 1));
                     return this.getName() + " voted for " + entry.getKey().getName();

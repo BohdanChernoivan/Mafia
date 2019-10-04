@@ -4,14 +4,11 @@ import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
-import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
@@ -21,6 +18,8 @@ public class CompleteGame implements ChangeOfDayAndNight {
     public PlayerList playerList = new PlayerList();
     public OfferForKilling listForMafia;
     public OfferForKilling listForCivilian;
+    public int countPlayer;
+    private Murder murder = new Murder();
     private boolean isDay;
 
     @Override
@@ -51,43 +50,55 @@ public class CompleteGame implements ChangeOfDayAndNight {
     }
 
     public void murderDay() {
-        Murder.killFromSelected(listForCivilian, playerList);
+        murder.killFromSelected(listForCivilian, playerList);
     }
 
     public void murderNightForMaffiozi() {
-        Murder.killFromSelected(listForMafia, playerList);
+        murder.killFromSelected(listForMafia, playerList);
     }
 
-    public String[] viewLinePlayer() {
-        String[] view = new String[playerList.getPlayerList().size()];
 
-        for (int i = 0; i < view.length; i++) {
-            view[i] = "Player [" + i + "], name " + playerList.getPlayerList().get(i).toString() + " = "
-                    + playerList.getPlayerList().get(i).getName();
+    public List<String> viewOrderPlayerList(List<Player> playerList) {
+        List<String> stringList = new ArrayList<>();
+
+        for (int i = 0; i < playerList.size(); i++) {
+            stringList.add("Player [" + i + "], name " + playerList.get(i).toString() + " = "
+                    + playerList.get(i).getName());
         }
 
-        return view;
+        return stringList;
     }
 
-    public String[] viewListMafia() {
-        String[] view = new String[listForMafia.getPlayerList().size()];
+    public String pickSelectionOrder(int numberPlayer) {
 
-        for (int i = 0; i < view.length; i++) {
-            view[i] = "Player [" + i + "], name " + listForMafia.getPlayerList().get(i).toString() + " = "
-                    + listForMafia.getPlayerList().get(i).getName();
+        if (playerList.getPlayerList().get(numberPlayer) != null) {
+            countPlayer++;
+            if (playerList.getPlayerList().get(countPlayer) != null) {
+                playerList.getPlayerList().get(countPlayer)
+                        .pick(listForCivilian, playerList.getPlayerList().get(numberPlayer), isDay());
+
+                return playerList.getPlayerList().get(countPlayer).getName() + " picks " +
+                        playerList.getPlayerList().get(numberPlayer).getName();
+            }
+            return "Such player none";
         }
-
-        return view;
+        return "Player does not pick anyone";
     }
 
-    public String[] viewListCivilian() {
-        String[] view = new String[listForCivilian.getPlayerList().size()];
+    public String voteSelectionOrder(int numberPlayer) {
 
-        for (int i = 0; i < view.length; i++) {
-            view[i] = "Player [" + i + "], name " + listForCivilian.getPlayerList().get(i).toString() + " = "
-                    + listForCivilian.getPlayerList().get(i).getName();
+        if (listForCivilian.getPlayerList().get(numberPlayer) != null) {
+            countPlayer++;
+            if (playerList.getPlayerList().get(countPlayer) != null) {
+                playerList.getPlayerList().get(countPlayer)
+                        .vote(listForCivilian, listForCivilian.getPlayerList().get(numberPlayer), isDay());
+
+                return playerList.getPlayerList().get(countPlayer).getName() + " voted for " +
+                        listForCivilian.getPlayerList().get(numberPlayer).getName();
+            }
+            return "Such player none";
         }
+        return "Player does not voteSelectionOrder";
 
-        return view;
     }
 }

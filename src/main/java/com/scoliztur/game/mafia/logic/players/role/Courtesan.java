@@ -12,7 +12,8 @@ public class Courtesan extends Player {
         super(name);
     }
 
-    public String confuse(Player player, boolean day) {
+    @Override
+    public String action(Player player, boolean day) {
         if(this.isActionNight() && !day) {
             getAwayFromPlayer();
             victim = player;

@@ -21,17 +21,17 @@ class SheriffTest {
 
     @Test
     void foundMafia() {
-        assertEquals(sheriff.findMafia(mafia, false), sheriff.toString() + " found Mafia");
+        assertEquals(sheriff.action(mafia, false), sheriff.toString() + " found Mafia");
     }
 
     @Test
     void findMafiaDay() {
-        assertEquals(sheriff.findMafia(mafia, true), sheriff.toString() +" is not active");
+        assertEquals(sheriff.action(mafia, true), sheriff.toString() +" is not active");
     }
 
     @Test
     void foundCivilian() {
-        assertEquals(sheriff.findMafia(civilian, false), sheriff.toString() +" not found Mafia");
+        assertEquals(sheriff.action(civilian, false), sheriff.toString() +" not found Mafia");
     }
 
     @Test

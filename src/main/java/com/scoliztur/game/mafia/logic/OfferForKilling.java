@@ -9,29 +9,29 @@ import java.util.Map;
 
 public class OfferForKilling {
 
-    private Map<Player, Byte> playerByteMap;
+    private Map<Player, Byte> playerVoiceMap;
 
     public OfferForKilling() {
-        playerByteMap = new LinkedHashMap<>();
+        playerVoiceMap = new LinkedHashMap<>();
     }
 
     public void addPlayer(Player player) {
 
         byte zeroVotes = 0;
-        playerByteMap.put(player, zeroVotes);
+        playerVoiceMap.put(player, zeroVotes);
     }
 
     public List<Player> getPlayerList() {
         List<Player> list = new ArrayList<>();
 
-        for (Map.Entry<Player, Byte> entry : playerByteMap.entrySet()) {
+        for (Map.Entry<Player, Byte> entry : playerVoiceMap.entrySet()) {
             list.add(entry.getKey());
         }
         return list;
     }
 
 
-    public Map<Player, Byte> getPlayerByteMap() {
-        return playerByteMap;
+    public Map<Player, Byte> getPlayerVoiceMap() {
+        return playerVoiceMap;
     }
 }

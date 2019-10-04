@@ -1,8 +1,8 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
-import com.scoliztur.game.mafia.services.game.CompleteGame;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,72 +23,72 @@ public class RoleController {
     }
 
     @PostMapping("/add_don")
-    public String addDon(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addDon(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addDon(roomId);
-            return "Added Don";
+            return ResponseEntity.ok().body("Don");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_mafia")
-    public String addMafia(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addMafia(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addMafia(roomId);
-            return "Added Mafia";
+            return ResponseEntity.ok().body("Mafia");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_courtesan")
-    public String addCourtesan(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addCourtesan(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addCourtesan(roomId);
-            return "Added Courtesan";
+            return ResponseEntity.ok().body("Courtesan");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_sheriff")
-    public String addSheriff(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addSheriff(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addSheriff(roomId);
-            return "Added Sheriff";
+            return ResponseEntity.ok().body("Sheriff");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_barman")
-    public String addBarman(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addBarman(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addBarman(roomId);
-            return "Added Barman";
+            return ResponseEntity.ok().body("Barman");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_doctor")
-    public String addDoctor(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addDoctor(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addDoctor(roomId);
-            return "Added Doctor";
+            return ResponseEntity.ok().body("Doctor");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 
     @PostMapping("/add_civilian")
-    public String addCivilian(@RequestParam("id") UUID roomId) {
+    public ResponseEntity addCivilian(@RequestParam("id") UUID roomId) {
         if (roomRepositories.existsById(roomId)) {
             roleForRoom.addCivilian(roomId);
-            return "Added Civilian";
+            return ResponseEntity.ok().body("Civilian");
         } else {
-            return "Such room does not exist";
+            return ResponseEntity.badRequest().body("Such room does not exist");
         }
     }
 }
