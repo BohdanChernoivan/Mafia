@@ -1,12 +1,15 @@
 package com.scoliztur.game.mafia.entity;
 
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "room")
@@ -22,12 +25,8 @@ public class Room extends BaseEntity {
     private String name;
 
     @Transient
-    @Column(name = "blackPlayers")
-    private List<BlackPlayers> blackPlayers;
-
-    @Transient
-    @Column(name = "redPlayers")
-    private List<RedPlayers> redPlayers;
+    @ElementCollection
+    private List<RoomPlayer> playerList = new ArrayList<>();
 
     @Column(name = "max_size_players", nullable = false)
     private int maxSizePlayers;
@@ -43,6 +42,10 @@ public class Room extends BaseEntity {
 
     public void addUser(AppUser appUser) {
         appUser.setRoomUser(this);
+    }
+
+    public void addPlayer(RoomPlayer player) {
+        this.playerList.add(player);
     }
 
     public void addPlayerNow() {
