@@ -19,7 +19,7 @@ public class Courtesan extends Player {
             victim = player;
             player.setActionDay(false);
             return player.getName() + " confused";
-        } else if(!checkOwnActivity()) {
+        } else if(!checkOwnActivityAtNight()) {
             getAwayFromPlayer();
             return toString() + " is not active";
         } else if (day) {

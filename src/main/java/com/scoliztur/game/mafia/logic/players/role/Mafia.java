@@ -20,7 +20,7 @@ public class Mafia extends Player {
         if (this.isActionNight() && !day) {
             offerForKilling.addPlayer(player);
             return player.getName() + " want to kill Mafia";
-        } else if (!checkOwnActivity()) {
+        } else if (!checkOwnActivityAtNight()) {
             return toString() + " is not active";
         } else if (day) {
             return "Now day";

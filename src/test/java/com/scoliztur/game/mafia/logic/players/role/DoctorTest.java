@@ -16,6 +16,6 @@ class DoctorTest {
     }
 
     @Test
-    void toString1() {
+    void getRoleName() {
     }
 }

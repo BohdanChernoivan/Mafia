@@ -22,29 +22,29 @@ class CivilianTest {
 
     @Test
     void checkOwnActivity() {
-        assertTrue(civilian.checkOwnActivity());
+        assertTrue(civilian.checkOwnActivityAtNight());
     }
 
     @Test
     void checkOwnActivityFalseAlive() {
         civilian.setAlive(false);
-        assertFalse(civilian.checkOwnActivity());
+        assertFalse(civilian.checkOwnActivityAtNight());
     }
 
     @Test
     void checkOwnActivityNotActiveNight() {
         civilian.setActionNight(false);
-        assertFalse(civilian.checkOwnActivity());
+        assertFalse(civilian.checkOwnActivityAtNight());
     }
 
     @Test
     void checkOwnActivityNotActiveDay() {
         civilian.setActionDay(false);
-        assertTrue(civilian.checkOwnActivity());
+        assertTrue(civilian.checkOwnActivityAtNight());
     }
 
     @Test
-    void getName() {
+    void getRoleName() {
         assertEquals(civilian.toString(), RedPlayers.CIVILIAN.getNameRole());
     }
 }

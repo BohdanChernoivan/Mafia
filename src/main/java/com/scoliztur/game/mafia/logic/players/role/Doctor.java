@@ -14,7 +14,7 @@ public class Doctor extends Player {
         if (this.isActionNight() && !day) {
             player.setAlive(true);
             return player.getName() + " resurrected";
-        } else if (!checkOwnActivity()) {
+        } else if (!checkOwnActivityAtNight()) {
             return toString() + " is not active";
         } else if (day) {
             return "Now day";

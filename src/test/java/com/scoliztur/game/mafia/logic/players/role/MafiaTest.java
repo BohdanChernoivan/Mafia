@@ -16,6 +16,6 @@ class MafiaTest {
     }
 
     @Test
-    void toString1() {
+    void getRoleName() {
     }
 }

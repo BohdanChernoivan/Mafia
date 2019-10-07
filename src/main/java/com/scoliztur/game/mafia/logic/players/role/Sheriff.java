@@ -18,7 +18,7 @@ public class Sheriff extends Player {
                     player.toString().equals(BlackPlayers.COURTESAN.getNameRole())) {
                 return this.toString() + " found Mafia";
             } else return this.toString() + " not found Mafia";
-        } else if (!checkOwnActivity()) {
+        } else if (!checkOwnActivityAtNight()) {
             return this.toString() + " is not active";
         } else if (day) {
             return "Now day";

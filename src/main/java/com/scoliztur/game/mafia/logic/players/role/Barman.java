@@ -19,7 +19,7 @@ public class Barman extends Player {
             victim = player;
             player.setActionNight(false);
             return player.getName() + " poisoned";
-        } else if (!checkOwnActivity()) {
+        } else if (!checkOwnActivityAtNight()) {
             getAwayFromPlayer();
             return toString() + " is not active";
         } else if (day) {

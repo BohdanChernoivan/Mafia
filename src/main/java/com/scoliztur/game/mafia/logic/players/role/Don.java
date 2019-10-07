@@ -16,7 +16,7 @@ public class Don extends Mafia {
             if (player.toString().equals(RedPlayers.SHERIFF.getNameRole())) {
                 return this.toString() + " found Sheriff";
             } else return this.toString() + " not found Sheriff";
-        } else if (!checkOwnActivity()) {
+        } else if (!checkOwnActivityAtNight()) {
             return this.toString() + " is not active";
         } else if (day) {
             return "Now day";

@@ -37,23 +37,27 @@ public abstract class Player {
     public abstract String action(Player player, boolean isActionDay);
 
     public String additionalAction(Player player, boolean day, OfferForKilling offerForKilling) {
-        return "additional";
+        return null;
     }
 
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
-        if(day) {
-            for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerVoiceMap().entrySet()) {
-                if (entry.getKey() == player) {
-                    entry.setValue((byte) (entry.getValue() + 1));
-                    return this.getName() + " voted for " + entry.getKey().getName();
+        if (day) {
+            if (this.isActionDay) {
+                for (Map.Entry<Player, Byte> entry : offerPlayer.getPlayerVoiceMap().entrySet()) {
+                    if (entry.getKey() == player) {
+                        entry.setValue((byte) (entry.getValue() + 1));
+                        return this.getName() + " voted for " + entry.getKey().getName();
+                    }
                 }
+            } else {
+                return "You not active";
             }
             return "There is no such player";
         } else
             return "Now is not day";
     }
 
-    public boolean checkOwnActivity() {
+    public boolean checkOwnActivityAtNight() {
 
         return this.isActionNight() && this.isAlive();
     }
