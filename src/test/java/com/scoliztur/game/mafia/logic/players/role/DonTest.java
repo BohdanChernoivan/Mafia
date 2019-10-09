@@ -21,23 +21,23 @@ class DonTest {
 
     @Test
     void findSheriff() {
-        assertEquals(don.action(sheriff, false), don.toString() + " found Sheriff");
+        assertEquals(don.findSheriff(sheriff, false), don.toString() + " found Sheriff");
     }
 
     @Test
     void findMafiaDay() {
-        assertEquals(don.action(sheriff, true), "Now day");
+        assertEquals(don.findSheriff(sheriff, true), "Now day");
     }
 
     @Test
     void findMafiaBeingNotActiveNight() {
         don.setActionNight(false);
-        assertEquals(don.action(sheriff, false), don.toString() + " is not active");
+        assertEquals(don.findSheriff(sheriff, false), don.toString() + " is not active");
     }
 
     @Test
     void foundCivilian() {
-        assertEquals(don.action(civilian, false), don.toString() + " not found Sheriff");
+        assertEquals(don.findSheriff(civilian, false), don.toString() + " not found Sheriff");
     }
 
     @Test

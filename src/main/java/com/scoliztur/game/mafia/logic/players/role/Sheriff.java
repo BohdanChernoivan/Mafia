@@ -26,6 +26,11 @@ public class Sheriff extends Player {
         return this.toString() + " not found Mafia";
     }
 
+    @Override
+    public String activityNight(Player player) {
+        return null;
+    }
+
 
     @Override
     public String toString() {

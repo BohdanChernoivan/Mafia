@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Barman extends Player {
 
     private Player victim;
+
     public Barman(String name) {
         super(name);
     }
@@ -25,6 +26,11 @@ public class Barman extends Player {
         } else if (day) {
             return "Now day";
         }
+        return null;
+    }
+
+    @Override
+    public String activityNight(Player player) {
         return null;
     }
 

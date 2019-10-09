@@ -1,13 +1,7 @@
 package com.scoliztur.game.mafia.validator;
 
-
 import com.scoliztur.game.mafia.entity.AppUser;
-import com.scoliztur.game.mafia.services.user.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
 @Slf4j
 public class UserValidator {

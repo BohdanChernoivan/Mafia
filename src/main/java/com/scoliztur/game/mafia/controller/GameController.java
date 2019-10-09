@@ -32,10 +32,10 @@ public class GameController {
         game.countPlayer = -1;
         if(game.listForMafia != null) {
             return ResponseEntity.ok("day" + "\n" + game.murderNightForMafia());
-
         }
-        return ResponseEntity.ok("day");
+        return ResponseEntity.ok("day + \n" + game.playerList.getPlayerList().get(0).getName() + " picks the first");
     }
+
 
     @PostMapping("/pick")
     public ResponseEntity pick(@RequestParam("player") int numberPlayer) {
@@ -64,11 +64,12 @@ public class GameController {
         return ResponseEntity.ok("night");
     }
 
-    @PostMapping("/action")
+    @PostMapping("/findSheriff")
     public ResponseEntity actionPlayer(@RequestParam("this_player") int thisNumberPlayer,
                                        @RequestParam("player") int numberPlayer) {
         return ResponseEntity.ok().body(game.actionPlayerNight(thisNumberPlayer, numberPlayer));
     }
+
 
 
     @GetMapping("/view/players")

@@ -18,8 +18,21 @@ class DoctorTest {
     }
 
     @Test
-    void resurrect() {
+    void resurrectPlayerAlive() {
         assertEquals(doctor.action(sheriff, false), sheriff.getName() + " resurrected");
+    }
+
+    @Test
+    void resurrectPlayerNotAlive() {
+        sheriff.setAlive(false);
+        assertEquals(doctor.action(sheriff, false), sheriff.getName() + " resurrected");
+    }
+
+    @Test
+    void resurrectNotAliveBoolean() {
+        sheriff.setAlive(false);
+        doctor.action(sheriff, false);
+        assertTrue(sheriff.isAlive());
     }
 
     @Test

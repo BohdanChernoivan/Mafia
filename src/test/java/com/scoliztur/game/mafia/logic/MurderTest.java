@@ -23,7 +23,7 @@ class MurderTest {
         murder = new Murder();
         civilian = new Civilian("Lola");
         sheriff = new Sheriff("Big");
-        don = new Don("Dick");
+        don = new Don("Large");
 
         playerList = new PlayerList();
 

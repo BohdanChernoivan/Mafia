@@ -4,6 +4,8 @@ import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
+import com.scoliztur.game.mafia.logic.players.role.Don;
+import com.scoliztur.game.mafia.logic.players.role.Mafia;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
 import org.springframework.stereotype.Service;
@@ -74,12 +76,18 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
         if (playerList.getPlayerList().get(countPlayer) != null) {
             countPlayer++;
+            String nextPlayer = "";
             if (playerList.getPlayerList().get(numberPlayer) != null) {
                 playerList.getPlayerList().get(countPlayer)
                         .pick(listForCivilian, playerList.getPlayerList().get(numberPlayer), isDay());
 
+                if(countPlayer + 1 <= playerList.getPlayerList().size()) {
+                    nextPlayer = playerList.getPlayerList().get(countPlayer + 1).getName() + " pick next!";
+                }
+
                 return playerList.getPlayerList().get(countPlayer).getName() + " picks " +
-                        playerList.getPlayerList().get(numberPlayer).getName();
+                        playerList.getPlayerList().get(numberPlayer).getName() + "\n" +
+                        nextPlayer;
             } else {
                 countPlayer++;
                 return "Player does not pick anyone";
@@ -109,12 +117,15 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
         Player player = playerList.getPlayerList().get(thisNumberPlayer);
 
-        if(player.toString().equals(BlackPlayers.MAFIA.getNameRole())) {
-            player.action(playerList.getPlayerList().get(numberPlayer), isDay());
-            return player.additionalAction(playerList.getPlayerList().get(numberPlayer), isDay(), listForMafia);
+        if (player.toString().equals(BlackPlayers.MAFIA.getNameRole())) {
+            Mafia mafia = (Mafia) playerList.getPlayerList().get(thisNumberPlayer);
+            mafia.setOffer(listForMafia);
+            return player.action(playerList.getPlayerList().get(numberPlayer), isDay());
+        } else if (player.toString().equals(BlackPlayers.DON.getNameRole())) {
+            Don don = (Don) playerList.getPlayerList().get(thisNumberPlayer);
+            return don.findSheriff(playerList.getPlayerList().get(numberPlayer), isDay());
         } else {
             return player.action(playerList.getPlayerList().get(numberPlayer), isDay());
         }
-
     }
 }

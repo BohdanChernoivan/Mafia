@@ -10,16 +10,9 @@ public class Doctor extends Player {
     }
 
     @Override
-    public String action(Player player, boolean day) {
-        if (this.isActionNight() && !day) {
-            player.setAlive(true);
-            return player.getName() + " resurrected";
-        } else if (!checkOwnActivityAtNight()) {
-            return toString() + " is not active";
-        } else if (day) {
-            return "Now day";
-        }
-        return null;
+    public String activityNight(Player player) {
+        player.setAlive(true);
+        return player.getName() + " resurrected";
     }
 
     @Override

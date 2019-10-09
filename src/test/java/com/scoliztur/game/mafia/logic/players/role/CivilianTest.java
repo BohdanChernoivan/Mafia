@@ -8,14 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CivilianTest {
 
-    private Sheriff sheriff;
-    private Don don;
     private Civilian civilian;
 
     @BeforeEach
     void setUp() {
-        sheriff = new Sheriff("Nick");
-        don = new Don("Dias");
         civilian = new Civilian("Lola");
     }
 

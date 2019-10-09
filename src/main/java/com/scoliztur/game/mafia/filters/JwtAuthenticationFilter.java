@@ -47,8 +47,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
 
-        log.info("ds {}", authentication.getPrincipal());
-
         UserPrincipal user = (UserPrincipal) authentication
                 .getPrincipal();
 

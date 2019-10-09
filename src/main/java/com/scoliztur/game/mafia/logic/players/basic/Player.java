@@ -1,6 +1,7 @@
 package com.scoliztur.game.mafia.logic.players.basic;
 
 import com.scoliztur.game.mafia.logic.OfferForKilling;
+import com.scoliztur.game.mafia.logic.players.model.ActionNight;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public abstract class Player {
+public abstract class Player implements ActionNight {
 
     private String name;
     private boolean isActionDay;
@@ -34,11 +35,18 @@ public abstract class Player {
         }
     }
 
-    public abstract String action(Player player, boolean isActionDay);
-
-    public String additionalAction(Player player, boolean day, OfferForKilling offerForKilling) {
+    public String action(Player player, boolean isActionDay) {
+        if(this.isActionNight() && !isActionDay) {
+            return activityNight(player);
+        } else if (!checkOwnActivityAtNight()) {
+            return toString() + " is not active";
+        } else if (isActionDay) {
+            return "Now day";
+        }
         return null;
     }
+
+    public abstract String activityNight(Player player);
 
     public String vote(OfferForKilling offerPlayer, Player player, boolean day) {
         if (day) {

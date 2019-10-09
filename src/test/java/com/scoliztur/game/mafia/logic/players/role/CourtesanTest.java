@@ -19,6 +19,7 @@ class CourtesanTest {
 
     @Test
     void confuse() {
+        assertEquals(courtesan.action(sheriff, false), sheriff.getName() + " confused");
     }
 
     @Test
@@ -28,5 +29,7 @@ class CourtesanTest {
 
     @Test
     void getVictim() {
+        courtesan.action(sheriff, false);
+        assertEquals(courtesan.getVictim().getName(), sheriff.getName());
     }
 }

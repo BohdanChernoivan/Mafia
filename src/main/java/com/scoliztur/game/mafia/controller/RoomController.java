@@ -5,7 +5,6 @@ import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
-import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +18,11 @@ public class RoomController {
 
     private final RoomRepositories roomRepositories;
     private final UserRepositories userRepositories;
-    private final RoleForRoom roleForRoom;
     private final CompleteGame game;
 
-    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoleForRoom roleForRoom, CompleteGame game) {
+    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, CompleteGame game) {
         this.roomRepositories = roomRepositories;
         this.userRepositories = userRepositories;
-        this.roleForRoom = roleForRoom;
         this.game = game;
     }
 
@@ -37,7 +34,7 @@ public class RoomController {
 
         AppUser appUser = userRepositories.findUserByUsername(principal.getName());
 
-        if(appUser.getRoleUser().size() == 0) {
+        if(appUser.getRoomUser() == null) {
 
             if (nameRoom == null) {
                 return ResponseEntity.badRequest().body("Room has not name. Write name room");
@@ -108,5 +105,13 @@ public class RoomController {
         } else {
             return ResponseEntity.badRequest().body("Roles more than players");
         }
+    }
+
+    @GetMapping("/continue")
+    public ResponseEntity continueGame(@RequestParam("id") UUID roomId) {
+
+        Room room = roomRepositories.getOne(roomId);
+
+        return ResponseEntity.ok().build();
     }
 }

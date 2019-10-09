@@ -26,7 +26,13 @@ class SheriffTest {
 
     @Test
     void findMafiaDay() {
-        assertEquals(sheriff.action(mafia, true), sheriff.toString() +" is not active");
+        assertEquals(sheriff.action(mafia, true), "Now day");
+    }
+
+    @Test
+    void findIsNotActive() {
+        sheriff.setActionNight(false);
+        assertEquals(sheriff.action(mafia, false), sheriff.toString() +" is not active");
     }
 
     @Test

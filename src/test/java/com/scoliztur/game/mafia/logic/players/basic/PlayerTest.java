@@ -19,11 +19,21 @@ class PlayerTest {
             public String action(Player player, boolean isActionDay) {
                 return null;
             }
+
+            @Override
+            public String activityNight(Player player) {
+                return null;
+            }
         };
 
         enemyPlayer = new Player("Enemy player") {
             @Override
             public String action(Player player, boolean isActionDay) {
+                return null;
+            }
+
+            @Override
+            public String activityNight(Player player) {
                 return null;
             }
         };

@@ -3,29 +3,23 @@ package com.scoliztur.game.mafia.logic.players.role;
 import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Mafia extends Player {
+
+    private OfferForKilling offer;
 
     public Mafia(String name) {
         super(name);
     }
 
     @Override
-    public String action(Player player, boolean isActionDay) {
-        return null;
-    }
-
-    @Override
-    public String additionalAction(Player player, boolean day, OfferForKilling offerForKilling) {
-        if (this.isActionNight() && !day) {
-            offerForKilling.addPlayer(player);
-            return player.getName() + " want to kill Mafia";
-        } else if (!checkOwnActivityAtNight()) {
-            return toString() + " is not active";
-        } else if (day) {
-            return "Now day";
-        }
-        return null;
+    public String activityNight(Player player) {
+        offer.addPlayer(player);
+        return player.getName() + " want to kill Mafia";
     }
 
     @Override

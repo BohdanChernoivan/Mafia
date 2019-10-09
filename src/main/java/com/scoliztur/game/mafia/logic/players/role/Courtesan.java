@@ -28,6 +28,12 @@ public class Courtesan extends Player {
         return null;
     }
 
+    @Override
+    public String activityNight(Player player) {
+        return null;
+    }
+
+
     private void getAwayFromPlayer() {
         if(victim != null) {
             victim.setActionDay(true);

@@ -35,6 +35,11 @@ class BarmanTest {
         assertEquals(barman.action(mafia, false), barman.toString() + " is not active");
     }
 
+    @Test
+    void getVictim() {
+        barman.action(mafia, false);
+        assertEquals(barman.getVictim().getName(), mafia.getName());
+    }
 
     @Test
     void getRoleName() {
