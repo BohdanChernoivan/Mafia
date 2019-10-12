@@ -33,7 +33,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/view_all")
+ /*   @GetMapping("/view_all")
     public ResponseEntity<List<AppUser>> getAll() {
         return ResponseEntity.ok().body(userService.getAll());
     }
@@ -52,5 +52,5 @@ public class UserController {
     public ResponseEntity delete(@RequestParam("id") UUID uuid) {
         userService.delete(uuid);
         return ResponseEntity.ok("User deleted");
-    }
+    }*/
 }

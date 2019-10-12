@@ -1,5 +1,10 @@
 package com.scoliztur.game.mafia.services.game;
 
+import com.scoliztur.game.mafia.entity.Room;
+import com.scoliztur.game.mafia.entity.RoomPlayer;
+import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
+import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
+import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
 import com.scoliztur.game.mafia.logic.OfferForKilling;
@@ -7,7 +12,9 @@ import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.Don;
 import com.scoliztur.game.mafia.logic.players.role.Mafia;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
+import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,13 +23,21 @@ import java.util.List;
 @Service
 public class CompleteGame implements ChangeOfDayAndNight {
 
+    @Autowired
+    private RoomPlayerRepositories roomPlayerRepositories;
+
+    @Autowired
+    private UserRepositories userRepositories;
+
+    private final PlayerRoleBindingService roleBindingService = new PlayerRoleBindingService();
+
     public List<String> nameOfList;
     public List<Player> listOfRole;
     public PlayerList playerList = new PlayerList();
     public OfferForKilling listForMafia;
     public OfferForKilling listForCivilian;
-    public int countPlayer;
     private Murder murder = new Murder();
+    public int countPlayer;
     private boolean isDay;
 
     @Override
@@ -53,11 +68,11 @@ public class CompleteGame implements ChangeOfDayAndNight {
     }
 
     public String murderDay() {
-        return murder.killFromSelected(listForCivilian, playerList);
+        return murder.killFromSelected(listForCivilian);
     }
 
     public String murderNightForMafia() {
-        return murder.killFromSelected(listForMafia, playerList);
+        return murder.killFromSelected(listForMafia);
     }
 
 
@@ -74,7 +89,7 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
     public String pickPlayerSelectionOrder(int numberPlayer) {
 
-        if (playerList.getPlayerList().get(countPlayer) != null) {
+        if (playerList.getPlayerList().get(countPlayer + 1) != null) {
             countPlayer++;
             String nextPlayer = "";
             if (playerList.getPlayerList().get(numberPlayer) != null) {
@@ -127,5 +142,62 @@ public class CompleteGame implements ChangeOfDayAndNight {
         } else {
             return player.action(playerList.getPlayerList().get(numberPlayer), isDay());
         }
+    }
+
+    private String restoreTheGame(List<Player> players, boolean day) {
+
+        playerList = new PlayerList();
+        playerList.getPlayerList().addAll(players);
+
+        isDay = day;
+
+        return "Successful";
+    }
+
+    public String restore(List<RoomPlayer> roomPlayerList, boolean day) {
+
+        List<Player> clonePlayerList = new ArrayList<>();
+
+        for (int i = 0; i < roomPlayerList.size(); i++) {
+            Player player = roleBindingService
+                    .createPlayer(roomPlayerList.get(i).getNameRole(), roomPlayerList.get(i).getNickname());
+            player.setAlive(roomPlayerList.get(i).isAlive());
+            player.setActionDay(roomPlayerList.get(i).isActiveDay());
+            player.setActionNight(roomPlayerList.get(i).isActiveNight());
+            if(player.isAlive()) {
+                clonePlayerList.add(player);
+            }
+        }
+
+        return restoreTheGame(clonePlayerList, day);
+
+    }
+
+    public List<RoomPlayer> saveRoomPlayer(Room room) {
+
+        List<RoomPlayer> list = new ArrayList<>();
+
+        List<Player> playerArrayList = new ArrayList<>(playerList.getPlayerList());
+
+        for (Player player : playerArrayList) {
+
+            RoomPlayer roomPlayer = new RoomPlayer();
+            roomPlayer.setNickname(player.getName());
+            roomPlayer.setNameRole(player.toString());
+            roomPlayer.setAlive(player.isAlive());
+            roomPlayer.setActiveDay(player.isActionDay());
+            roomPlayer.setActiveNight(player.isActionNight());
+            roomPlayer.setRoomUser(room);
+
+            if(!player.isAlive()) {
+                playerList.deletePlayer(player);
+                roomPlayerRepositories.delete(roomPlayer);
+                userRepositories.findUserByRoomUser(room).setRoomUser(null);
+            } else {
+                list.add(roomPlayer);
+            }
+        }
+
+        return list;
     }
 }

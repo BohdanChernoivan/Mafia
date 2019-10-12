@@ -23,7 +23,7 @@ public class UserService implements UserModel {
     private final RoleRepositories roleRepositories;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     public UserService(UserRepositories userRepositories, RoleRepositories roleRepositories, PasswordEncoder passwordEncoder) {
         this.userRepositories = userRepositories;
         this.roleRepositories = roleRepositories;

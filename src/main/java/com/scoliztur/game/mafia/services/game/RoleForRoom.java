@@ -25,53 +25,35 @@ public class RoleForRoom {
         this.completeGame = completeGame;
     }
 
+    public void addRole(String nameRole) {
 
-    public void addDon(UUID roomId) {
-        BlackPlayers blackPlayers = BlackPlayers.DON;
-        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
+        switch (nameRole) {
+            case "Don":
+                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.DON.getNameRole(), ""));
+                break;
+            case "Mafia":
+                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.MAFIA.getNameRole(), ""));
+                break;
+            case "Courtesan":
+                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.COURTESAN.getNameRole(), ""));
+                break;
+            case "Sheriff":
+                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.SHERIFF.getNameRole(), ""));
+                break;
+            case "Barman":
+                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.BARMAN.getNameRole(), ""));
+                break;
+            case "Doctor":
+                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.DOCTOR.getNameRole(), ""));
+                break;
+            case "Civilian" :
+                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + nameRole);
+        }
     }
 
-
-    public void addMafia(UUID roomId) {
-        BlackPlayers blackPlayers = BlackPlayers.MAFIA;
-        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
-    }
-
-
-    public void addCourtesan(UUID roomId) {
-        BlackPlayers blackPlayers = BlackPlayers.COURTESAN;
-        completeGame.listOfRole.add(playerFactory.createBlackPlayer(blackPlayers, ""));
-//        roomRepositories.getOne(roomId).getBlackPlayers().add(blackPlayers);
-    }
-
-    public void addSheriff(UUID roomId) {
-        RedPlayers redPlayers = RedPlayers.SHERIFF;
-        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
-    }
-
-
-    public void addBarman(UUID roomId) {
-        RedPlayers redPlayers = RedPlayers.BARMAN;
-        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
-    }
-
-
-    public void addDoctor(UUID roomId) {
-        RedPlayers redPlayers = RedPlayers.DOCTOR;
-        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
-    }
-
-
-    public void addCivilian(UUID roomId) {
-        RedPlayers redPlayers = RedPlayers.CIVILIAN;
-        completeGame.listOfRole.add(playerFactory.createRedPlayer(redPlayers, ""));
-//        roomRepositories.getOne(roomId).getRedPlayers().add(redPlayers);
-    }
 
     public PlayerList randomDistributionOfRole(UUID id) {
 
@@ -85,7 +67,7 @@ public class RoleForRoom {
             if(completeGame.nameOfList.size() > completeGame.listOfRole.size()) {
                 int notEnoughPlayers = completeGame.nameOfList.size() - completeGame.listOfRole.size();
                 for (int i = 0; i < notEnoughPlayers; i++) {
-                    completeGame.listOfRole.add(playerFactory.createRedPlayer(RedPlayers.CIVILIAN, ""));
+                    completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
                 }
             }
         } else {

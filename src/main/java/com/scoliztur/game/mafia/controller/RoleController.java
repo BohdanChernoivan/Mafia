@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/room/role")
+@RequestMapping("/room")
 public class RoleController {
 
     private final RoleForRoom roleForRoom;
@@ -22,71 +22,12 @@ public class RoleController {
         this.roomRepositories = roomRepositories;
     }
 
-    @PostMapping("/add_don")
-    public ResponseEntity addDon(@RequestParam("id") UUID roomId) {
+    @PostMapping("/add_role")
+    public ResponseEntity addRole(@RequestParam("id") UUID roomId,
+                                  @RequestParam("role") String nameRole) {
         if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addDon(roomId);
-            return ResponseEntity.ok().body("Don");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_mafia")
-    public ResponseEntity addMafia(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addMafia(roomId);
-            return ResponseEntity.ok().body("Mafia");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_courtesan")
-    public ResponseEntity addCourtesan(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addCourtesan(roomId);
-            return ResponseEntity.ok().body("Courtesan");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_sheriff")
-    public ResponseEntity addSheriff(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addSheriff(roomId);
-            return ResponseEntity.ok().body("Sheriff");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_barman")
-    public ResponseEntity addBarman(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addBarman(roomId);
-            return ResponseEntity.ok().body("Barman");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_doctor")
-    public ResponseEntity addDoctor(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addDoctor(roomId);
-            return ResponseEntity.ok().body("Doctor");
-        } else {
-            return ResponseEntity.badRequest().body("Such room does not exist");
-        }
-    }
-
-    @PostMapping("/add_civilian")
-    public ResponseEntity addCivilian(@RequestParam("id") UUID roomId) {
-        if (roomRepositories.existsById(roomId)) {
-            roleForRoom.addCivilian(roomId);
-            return ResponseEntity.ok().body("Civilian");
+            roleForRoom.addRole(nameRole);
+            return ResponseEntity.ok().body("Done");
         } else {
             return ResponseEntity.badRequest().body("Such room does not exist");
         }

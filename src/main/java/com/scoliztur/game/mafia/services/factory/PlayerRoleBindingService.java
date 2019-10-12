@@ -11,29 +11,21 @@ import org.springframework.stereotype.Service;
 public class PlayerRoleBindingService implements CreatorPlayer {
 
     @Override
-    public Player createRedPlayer(RedPlayers redPlayer, String name) {
-        switch (redPlayer) {
-            case SHERIFF:
+    public Player createPlayer(String nameRole, String name) {
+        switch (nameRole) {
+            case "Sheriff":
                 return new Sheriff(name);
-            case BARMAN:
+            case "Barman":
                 return new Barman(name);
-            case CIVILIAN:
+            case "Civilian":
                 return new Civilian(name);
-            case DOCTOR:
+            case "Doctor":
                 return new Doctor(name);
-                default:
-                    return null;
-        }
-    }
-
-    @Override
-    public Player createBlackPlayer(BlackPlayers blackPlayer, String name) {
-        switch (blackPlayer) {
-            case DON:
+            case "Don":
                 return new Don(name);
-            case MAFIA:
+            case "Mafia":
                 return new Mafia(name);
-            case COURTESAN:
+            case "Courtesan":
                 return new Courtesan(name);
                 default:
                     return null;
