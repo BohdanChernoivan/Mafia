@@ -1,9 +1,13 @@
 package com.scoliztur.game.mafia.logic;
 
 import com.scoliztur.game.mafia.logic.players.PlayerList;
+import com.scoliztur.game.mafia.logic.players.basic.Player;
 import com.scoliztur.game.mafia.logic.players.role.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,7 +43,13 @@ class MurderTest {
     @Test
     void killFromSelected() {
         offerForKilling.addPlayer(civilian);
-        murder.killFromSelected(offerForKilling, playerList);
+        murder.killFromSelected(offerForKilling);
+        List<Player> list = new ArrayList<>(playerList.getPlayerList());
+        for (Player p : list) {
+            if(!p.isAlive()) {
+                playerList.deletePlayer(p);
+            }
+        }
         assertEquals(playerList.getPlayerList().size(), 4);
     }
 }

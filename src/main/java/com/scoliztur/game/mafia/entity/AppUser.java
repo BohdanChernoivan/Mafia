@@ -1,5 +1,6 @@
 package com.scoliztur.game.mafia.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@EqualsAndHashCode(callSuper = false)
 public class AppUser extends BaseEntity {
 
     @Column(name = "login", nullable = false, unique = true)
@@ -24,7 +25,8 @@ public class AppUser extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -33,9 +35,18 @@ public class AppUser extends BaseEntity {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     @JoinTable(name = "user_room",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"))
     private Room roomUser;
 
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "login='" + login + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

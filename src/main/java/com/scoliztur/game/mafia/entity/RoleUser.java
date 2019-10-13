@@ -18,7 +18,7 @@ public class RoleUser extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roleUser", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roleUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AppUser> appUsers;
 
 }
