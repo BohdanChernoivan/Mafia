@@ -6,7 +6,6 @@ import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
-import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -116,17 +115,23 @@ public class RoomController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity start(@RequestParam("id") UUID roomId) {
+    public ResponseEntity start(@RequestParam("id") UUID roomId, Principal principal) {
 
         Room room = roomRepositories.getOne(roomId);
 
-        if(room.getPlayersNow() >= game.listOfRole.size()
-                || room.getPlayersNow() >= room.getMinSizePlayers()) {
-            game.newPlayerList();
-            game.listOfRole = new ArrayList<>();
-            return ResponseEntity.ok().body("Start game in room -> " + room.getName());
+        AppUser appUser = userRepositories.findUserByUsername(principal.getName());
+
+        if (room.getCreatorId().equals(appUser.getId())) {
+            if (room.getPlayersNow() >= game.listOfRole.size()
+                    || room.getPlayersNow() >= room.getMinSizePlayers()) {
+                game.newPlayerList();
+                game.listOfRole = new ArrayList<>();
+                return ResponseEntity.ok().body("Start game in room -> " + room.getName());
+            } else {
+                return ResponseEntity.badRequest().body("Roles more than players");
+            }
         } else {
-            return ResponseEntity.badRequest().body("Roles more than players");
+            return ResponseEntity.badRequest().body("You not creator this room");
         }
     }
 }
