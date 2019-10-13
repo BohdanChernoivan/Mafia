@@ -17,7 +17,6 @@ public class Murder {
 
         if (mapForKilledPlayer != null) {
             mapForKilledPlayer.getKey().setAlive(false);
-//            playerList.deletePlayer(mapForKilledPlayer.getKey());
             return mapForKilledPlayer.getKey().getName() + " was killed";
         }
 

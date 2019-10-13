@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "room_player")
@@ -25,19 +26,20 @@ public class RoomPlayer {
     @Column(name = "player_id", nullable = false, updatable = false)
     private Long playerId;
 
-    @Column
+    @Column(name = "name", nullable = false, unique = true)
     private String nickname;
 
-    @Column
+    @Column(name = "role")
     private String nameRole;
 
-    @Column
-    private boolean alive;
-
-    @Column
+    @org.hibernate.annotations.Type(type="yes_no")
+    @NotNull
+    @Column(name = "day_active")
     private boolean activeDay;
 
-    @Column
+    @org.hibernate.annotations.Type(type="yes_no")
+    @NotNull
+    @Column(name = "night_active")
     private boolean activeNight;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

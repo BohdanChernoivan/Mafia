@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    // {"username": "name", "password": "pass"}
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         var username = request.getHeader("login");
         var password = request.getHeader("password");

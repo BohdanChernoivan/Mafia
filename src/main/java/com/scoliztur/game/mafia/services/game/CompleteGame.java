@@ -3,7 +3,6 @@ package com.scoliztur.game.mafia.services.game;
 import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
-import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.logic.Murder;
 import com.scoliztur.game.mafia.logic.players.PlayerList;
@@ -65,6 +64,7 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
     public void newListForCivilian() {
         listForCivilian = new OfferForKilling();
+        countPlayer = -1;
     }
 
     public String murderDay() {
@@ -161,7 +161,6 @@ public class CompleteGame implements ChangeOfDayAndNight {
         for (int i = 0; i < roomPlayerList.size(); i++) {
             Player player = roleBindingService
                     .createPlayer(roomPlayerList.get(i).getNameRole(), roomPlayerList.get(i).getNickname());
-            player.setAlive(roomPlayerList.get(i).isAlive());
             player.setActionDay(roomPlayerList.get(i).isActiveDay());
             player.setActionNight(roomPlayerList.get(i).isActiveNight());
             if(player.isAlive()) {
@@ -181,18 +180,23 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
         for (Player player : playerArrayList) {
 
-            RoomPlayer roomPlayer = new RoomPlayer();
-            roomPlayer.setNickname(player.getName());
-            roomPlayer.setNameRole(player.toString());
-            roomPlayer.setAlive(player.isAlive());
+            RoomPlayer roomPlayer;
+
+            if(roomPlayerRepositories.existsRoomPlayerByNickname(player.getName())) {
+                roomPlayer = roomPlayerRepositories.findByNickname(player.getName());
+            } else {
+                roomPlayer = new RoomPlayer();
+                roomPlayer.setNickname(player.getName());
+                roomPlayer.setNameRole(player.toString());
+                roomPlayer.setRoomUser(room);
+            }
             roomPlayer.setActiveDay(player.isActionDay());
             roomPlayer.setActiveNight(player.isActionNight());
-            roomPlayer.setRoomUser(room);
 
             if(!player.isAlive()) {
                 playerList.deletePlayer(player);
                 roomPlayerRepositories.delete(roomPlayer);
-                userRepositories.findUserByRoomUser(room).setRoomUser(null);
+                userRepositories.findUserByUsername(player.getName()).setRoomUser(null);
             } else {
                 list.add(roomPlayer);
             }

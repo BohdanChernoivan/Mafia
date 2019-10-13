@@ -36,22 +36,7 @@ public class GameController {
 
         game.playerList = roleForRoom.randomDistributionOfRole(roomId);
 
-        return ResponseEntity.ok().body("Done");
-    }
-
-
-    @PostMapping("/day")
-    public ResponseEntity day(@RequestParam("id") UUID roomId) {
-
-        game.day();
-        game.newListForCivilian();
-        game.countPlayer = -1;
-
         Room room = roomRepositories.getOne(roomId);
-
-        room.setDay(game.isDay());
-
-        roomRepositories.save(room);
 
         List<RoomPlayer> list = game.saveRoomPlayer(room);
 
@@ -59,12 +44,44 @@ public class GameController {
             playerRepositories.save(roomPlayer);
         }
 
-        if(game.listForMafia != null) {
-            return ResponseEntity.ok("day" + "\n" + game.murderNightForMafia());
-        }
-        return ResponseEntity.ok("day + \n" + game.playerList.getPlayerList().get(0).getName() + " picks the first");
+        return ResponseEntity.ok().body("Done");
     }
 
+    @PostMapping("/day")
+    public ResponseEntity doDay(@RequestParam("id") UUID roomId) {
+
+        Room room = roomRepositories.getOne(roomId);
+        game.day();
+        room.setDay(game.isDay());
+        roomRepositories.save(room);
+
+        if (game.listForMafia != null) {
+            return ResponseEntity.ok("Day has come" + "\n" + game.murderNightForMafia() + "\n"
+                    + game.playerList.getPlayerList().get(0).getName() + " picks the first");
+        } else {
+            return ResponseEntity.ok("Day has come" + "\n" + game.playerList.getPlayerList().get(0).getName() + " picks the first");
+        }
+    }
+
+    @PostMapping("/day/wake_up")
+    public ResponseEntity wakeUpDay(@RequestParam("id") UUID roomId) {
+
+        Room room = roomRepositories.getOne(roomId);
+
+        if (room.isDay()) {
+            game.newListForCivilian();
+
+            List<RoomPlayer> list = game.saveRoomPlayer(room);
+
+            for (RoomPlayer roomPlayer : list) {
+                playerRepositories.save(roomPlayer);
+            }
+
+            return ResponseEntity.ok().body("Day");
+        } else {
+            return ResponseEntity.badRequest().body("Now night");
+        }
+    }
 
     @PostMapping("/pick")
     public ResponseEntity pick(@RequestParam("player") int numberPlayer) {
@@ -85,27 +102,38 @@ public class GameController {
     }
 
     @PostMapping("/night")
-    public ResponseEntity night(@RequestParam("id") UUID roomId) {
+    public ResponseEntity doNight(@RequestParam("id") UUID roomId) {
 
-        game.newListForMafia();
+        Room room = roomRepositories.getOne(roomId);
         game.night();
+        room.setDay(game.isDay());
+        roomRepositories.save(room);
+
+        if (game.listForCivilian != null) {
+            return ResponseEntity.ok().body(game.murderDay() + "\n" + "Night has come");
+        } else {
+            return ResponseEntity.ok("Night has come");
+        }
+    }
+
+    @PostMapping("/night/wake_up")
+    public ResponseEntity wakeUpNight(@RequestParam("id") UUID roomId) {
 
         Room room = roomRepositories.getOne(roomId);
 
-        room.setDay(game.isDay());
+        if(!room.isDay()) {
+            game.newListForMafia();
 
-        roomRepositories.save(room);
+            List<RoomPlayer> list = game.saveRoomPlayer(room);
 
-        List<RoomPlayer> list = game.saveRoomPlayer(room);
+            for (RoomPlayer roomPlayer : list) {
+                playerRepositories.save(roomPlayer);
+            }
 
-        for (RoomPlayer roomPlayer : list) {
-            playerRepositories.save(roomPlayer);
+            return ResponseEntity.ok().body("Night");
+        } else {
+            return ResponseEntity.badRequest().body("Now day");
         }
-
-        if(game.listForCivilian != null) {
-            return ResponseEntity.ok("night" + "\n" +  game.murderDay());
-        }
-        return ResponseEntity.ok("night");
     }
 
     @PostMapping("/findSheriff")

@@ -8,7 +8,6 @@ import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
-import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +20,12 @@ public class RoomController {
 
     private final RoomRepositories roomRepositories;
     private final UserRepositories userRepositories;
-    private final PlayerRoleBindingService roleBindingService;
     private final RoomPlayerRepositories playerRepositories;
     private final CompleteGame game;
 
-    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, PlayerRoleBindingService roleBindingService, RoomPlayerRepositories playerRepositories, CompleteGame game) {
+    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoomPlayerRepositories playerRepositories, CompleteGame game) {
         this.roomRepositories = roomRepositories;
         this.userRepositories = userRepositories;
-        this.roleBindingService = roleBindingService;
         this.playerRepositories = playerRepositories;
         this.game = game;
     }
@@ -61,13 +58,13 @@ public class RoomController {
             room.setName(nameRoom);
             room.setMaxSizePlayers(maxSize);
             room.setDay(true);
+            room.setCreatorId(appUser.getId());
 
             appUser.setRoomUser(room);
 
             game.nameOfList.add(appUser.getUsername());
             roomRepositories.save(room);
             userRepositories.save(appUser);
-
 
             return ResponseEntity.ok().body("Create room. Name -> " + nameRoom);
         } else {

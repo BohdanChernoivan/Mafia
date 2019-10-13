@@ -9,4 +9,8 @@ import java.util.UUID;
 
 public interface RoomPlayerRepositories extends JpaRepository<RoomPlayer, UUID> {
     List<RoomPlayer> findAllByRoomUser(Room room);
+
+    RoomPlayer findByNickname(String nickname);
+
+    boolean existsRoomPlayerByNickname(String nickname);
 }
