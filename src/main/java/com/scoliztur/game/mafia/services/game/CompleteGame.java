@@ -92,18 +92,23 @@ public class CompleteGame implements ChangeOfDayAndNight {
         if (playerList.getPlayerList().get(countPlayer + 1) != null) {
             countPlayer++;
             String nextPlayer = "";
-            if (playerList.getPlayerList().get(numberPlayer) != null) {
-                playerList.getPlayerList().get(countPlayer)
-                        .pick(listForCivilian, playerList.getPlayerList().get(numberPlayer), isDay());
+            try {
+                if (playerList.getPlayerList().get(numberPlayer) != null) {
+                    playerList.getPlayerList().get(countPlayer)
+                            .pick(listForCivilian, playerList.getPlayerList().get(numberPlayer), isDay());
 
-                if(countPlayer + 1 <= playerList.getPlayerList().size()) {
-                    nextPlayer = playerList.getPlayerList().get(countPlayer + 1).getName() + " pick next!";
+                    if (countPlayer + 1 <= playerList.getPlayerList().size()) {
+                        nextPlayer = playerList.getPlayerList().get(countPlayer + 1).getName() + " pick next!";
+                    }
+
+                    return playerList.getPlayerList().get(countPlayer).getName() + " picks " +
+                            playerList.getPlayerList().get(numberPlayer).getName() + "\n" +
+                            nextPlayer;
+                } else {
+                    countPlayer++;
+                    return "Player does not pick anyone";
                 }
-
-                return playerList.getPlayerList().get(countPlayer).getName() + " picks " +
-                        playerList.getPlayerList().get(numberPlayer).getName() + "\n" +
-                        nextPlayer;
-            } else {
+            } catch (IndexOutOfBoundsException e) {
                 countPlayer++;
                 return "Player does not pick anyone";
             }
@@ -176,9 +181,9 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
         List<RoomPlayer> list = new ArrayList<>();
 
-        List<Player> playerArrayList = new ArrayList<>(playerList.getPlayerList());
+        List<Player> clonePlayerList = new ArrayList<>(playerList.getPlayerList());
 
-        for (Player player : playerArrayList) {
+        for (Player player : clonePlayerList) {
 
             RoomPlayer roomPlayer;
 

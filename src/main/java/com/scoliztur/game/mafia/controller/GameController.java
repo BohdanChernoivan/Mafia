@@ -6,7 +6,6 @@ import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.services.game.CompleteGame;
-import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,35 +16,18 @@ import java.util.*;
 public class GameController {
 
     private final CompleteGame game;
-    private final RoleForRoom roleForRoom;
     private final RoomRepositories roomRepositories;
     private final RoomPlayerRepositories playerRepositories;
 
 
-    public GameController(CompleteGame game, RoleForRoom roleForRoom,
+    public GameController(CompleteGame game,
                           RoomRepositories roomRepositories,
                           RoomPlayerRepositories playerRepositories) {
         this.game = game;
-        this.roleForRoom = roleForRoom;
         this.roomRepositories = roomRepositories;
         this.playerRepositories = playerRepositories;
     }
 
-    @PostMapping("/shuffle")
-    public ResponseEntity shuffleRole(@RequestParam("id") UUID roomId) {
-
-        game.playerList = roleForRoom.randomDistributionOfRole(roomId);
-
-        Room room = roomRepositories.getOne(roomId);
-
-        List<RoomPlayer> list = game.saveRoomPlayer(room);
-
-        for (RoomPlayer roomPlayer : list) {
-            playerRepositories.save(roomPlayer);
-        }
-
-        return ResponseEntity.ok().body("Done");
-    }
 
     @PostMapping("/day")
     public ResponseEntity doDay(@RequestParam("id") UUID roomId) {
@@ -136,7 +118,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/findSheriff")
+    @PostMapping("/action")
     public ResponseEntity actionPlayer(@RequestParam("this_player") int thisNumberPlayer,
                                        @RequestParam("player") int numberPlayer) {
         return ResponseEntity.ok().body(game.actionPlayerNight(thisNumberPlayer, numberPlayer));
