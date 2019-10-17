@@ -18,17 +18,10 @@ public class UserController {
 
     private final UserService userService;
     private final UserValidator userValidator;
-    private final RoleRepositories roleRepositories;
 
-    public UserController(UserService userService, RoleRepositories roleRepositories) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleRepositories = roleRepositories;
         this.userValidator = new UserValidator();
-        if(roleRepositories.findByName("USER") == null) {
-            RoleUser roleUser = new RoleUser();
-            roleUser.setName("USER");
-            roleRepositories.save(roleUser);
-        }
     }
 
     @PostMapping("/registration")

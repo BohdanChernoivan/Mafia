@@ -65,7 +65,6 @@ public class RoomController {
             appUser.setRoomUser(room);
 
             game.nameOfList.add(appUser.getUsername());
-            roomRepositories.save(room);
             userRepositories.save(appUser);
 
             return ResponseEntity.ok().body("Create room. Name -> " + nameRoom);
@@ -96,7 +95,6 @@ public class RoomController {
 
                 game.nameOfList.add(appUser.getUsername());
                 userRepositories.save(appUser);
-                roomRepositories.save(room);
 
                 return ResponseEntity.ok().body(userRepositories.getOne(appUser.getId()).getUsername()
                         + " join in room -> " + roomRepositories.getOne(roomId).getName());

@@ -5,7 +5,7 @@ import com.scoliztur.game.mafia.entity.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -31,7 +31,7 @@ public class AppUser extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
-    private List<RoleUser> roleUser;
+    private Set<RoleUser> roleUser;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
