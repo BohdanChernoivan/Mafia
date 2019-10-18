@@ -5,7 +5,7 @@ import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
-import com.scoliztur.game.mafia.services.game.CompleteGame;
+import com.scoliztur.game.mafia.services.game.Game;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +16,12 @@ import java.util.*;
 @RequestMapping("/game")
 public class GameController {
 
-    private final CompleteGame game;
+    private final Game game;
     private final RoomRepositories roomRepositories;
     private final RoomPlayerRepositories playerRepositories;
 
 
-    public GameController(CompleteGame game,
+    public GameController(Game game,
                           RoomRepositories roomRepositories,
                           RoomPlayerRepositories playerRepositories) {
         this.game = game;
@@ -136,7 +136,7 @@ public class GameController {
     @PostMapping("/action")
     public ResponseEntity actionPlayer(@RequestParam("player") int numberPlayer,
                                        Principal principal) {
-        return ResponseEntity.ok().body(game.actionPlayerNight(principal.getName(), numberPlayer));
+        return ResponseEntity.ok().body(game.actionPlayer(principal.getName(), numberPlayer));
     }
 
     @GetMapping("/view_role")

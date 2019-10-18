@@ -13,7 +13,7 @@ import com.scoliztur.game.mafia.logic.players.role.Mafia;
 import com.scoliztur.game.mafia.logic.players.role.type.BlackPlayers;
 import com.scoliztur.game.mafia.logic.players.role.type.RedPlayers;
 import com.scoliztur.game.mafia.services.factory.PlayerRoleBindingService;
-import com.scoliztur.game.mafia.services.game.model.ChangeOfDayAndNight;
+import com.scoliztur.game.mafia.services.game.model.CompleteGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CompleteGame implements ChangeOfDayAndNight {
+public class Game implements CompleteGame {
 
     @Autowired
     private RoomPlayerRepositories roomPlayerRepositories;
@@ -50,7 +50,6 @@ public class CompleteGame implements ChangeOfDayAndNight {
         isDay = false;
     }
 
-    @Override
     public boolean isDay() {
         return isDay;
     }
@@ -87,6 +86,7 @@ public class CompleteGame implements ChangeOfDayAndNight {
         return stringList;
     }
 
+    @Override
     public String pickPlayerSelectionOrder(String playerName, int numberPlayer) {
 
         Player thisPlayer = findPlayerInList(playerName);
@@ -123,6 +123,7 @@ public class CompleteGame implements ChangeOfDayAndNight {
         }
     }
 
+    @Override
     public String vote(String playerName, int numberPlayer) {
 
         Player thisPlayer = findPlayerInList(playerName);
@@ -140,7 +141,8 @@ public class CompleteGame implements ChangeOfDayAndNight {
     }
 
 
-    public String actionPlayerNight(String playerName, int numberPlayer) {
+    @Override
+    public String actionPlayer(String playerName, int numberPlayer) {
 
         Player thisPlayer = findPlayerInList(playerName);
 
@@ -171,12 +173,12 @@ public class CompleteGame implements ChangeOfDayAndNight {
 
         List<Player> clonePlayerList = new ArrayList<>();
 
-        for (int i = 0; i < roomPlayerList.size(); i++) {
+        for (RoomPlayer roomPlayer : roomPlayerList) {
             Player player = roleBindingService
-                    .createPlayer(roomPlayerList.get(i).getNameRole(), roomPlayerList.get(i).getNickname());
-            player.setActionDay(roomPlayerList.get(i).isActiveDay());
-            player.setActionNight(roomPlayerList.get(i).isActiveNight());
-            if(player.isAlive()) {
+                    .createPlayer(roomPlayer.getNameRole(), roomPlayer.getNickname());
+            player.setActionDay(roomPlayer.isActiveDay());
+            player.setActionNight(roomPlayer.isActiveNight());
+            if (player.isAlive()) {
                 clonePlayerList.add(player);
             }
         }

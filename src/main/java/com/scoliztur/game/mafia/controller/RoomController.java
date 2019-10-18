@@ -6,7 +6,7 @@ import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
-import com.scoliztur.game.mafia.services.game.CompleteGame;
+import com.scoliztur.game.mafia.services.game.Game;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +22,9 @@ public class RoomController {
     private final UserRepositories userRepositories;
     private final RoomPlayerRepositories playerRepositories;
     private final RoleForRoom roleForRoom;
-    private final CompleteGame game;
+    private final Game game;
 
-    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoomPlayerRepositories playerRepositories, RoleForRoom roleForRoom, CompleteGame game) {
+    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoomPlayerRepositories playerRepositories, RoleForRoom roleForRoom, Game game) {
         this.roomRepositories = roomRepositories;
         this.userRepositories = userRepositories;
         this.playerRepositories = playerRepositories;
