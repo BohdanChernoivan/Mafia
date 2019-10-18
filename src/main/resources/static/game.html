@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="form">
+    <label>Id room:<br>
+        <input id="id" name="id" type="text" maxlength="30"></label><br>
+    <label>Player:<br>
+        <input id="player" name="player" type="number" maxlength="30"></label><br>
+</form>
+<button onclick="pick()">pick</button>
+<button onclick="vote()">vote</button>
+<button onclick="action()">action</button>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    function pick(){
+        var id = document.getElementById("id").value;
+        var player = document.getElementById("player").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/pick',
+            data: "id=" + id + "&player=" + player,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function vote(){
+        var id = document.getElementById("id").value;
+        var player = document.getElementById("player").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/vote',
+            data: "id=" + id + "&player=" + player,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function action(){
+        var id = document.getElementById("id").value;
+        var player = document.getElementById("player").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/action',
+            data: "id=" + id + "&player=" + player,
+            success: function (data) {
+                console.log(data);
+
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

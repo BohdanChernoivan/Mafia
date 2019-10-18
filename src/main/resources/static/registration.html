@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+</head>
+<body>
+<form id="form">
+    <label>Login:<br>
+        <input id="login" name="login" type="text" maxlength="30"></label><br>
+    <label>Username:<br>
+        <input id="username" name="username" type="text" maxlength="30"></label><br>
+    <label>Password:<br>
+        <input id="password" name="password" type="password" maxlength="30"></label><br>
+</form>
+<button onclick="registration()">Registration</button>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    function registration(){
+        var login = document.getElementById("login").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        console.log(login)
+        console.log(username)
+        console.log(password)
+        $.ajax({
+            type: 'POST',
+            url: '/user/registration',
+            data: "login=" + login + "&username=" + username + "&password=" + password,
+            success: function (data) {
+                console.log(data);
+                window.location.href = '#/login';
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>
