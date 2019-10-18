@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+</head>
+<body>
+    <form id="form">
+        <label>Login:<br>
+            <span id="loginError" hidden></span><br>
+            <input id="login" name="login" type="text" maxlength="20"></label><br>
+        <label>Username:<br>
+            <span id="usernameError" hidden></span><br>
+            <input id="username" name="username" type="text" maxlength="20"></label><br>
+        <label>Password:<br>
+            <span id="passwordError" hidden></span><br>
+            <input id="password" name="password" type="password" maxlength="20"></label><br>
+    </form>
+    <button onclick="validation()">Sign up</button>
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    function validation(){
+        var login = document.getElementById("login").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/registration',
+            data: "login=" + login + "&username=" + username + "&password=" + password,
+
+            success: function (data) {
+                console.log(data);
+                myTurn = data.myTurn;
+                showPlayerShips(data.playerShips);
+                showPlayerBoard(data.playerBoard);
+                revealCells();
+                if (data.winner !== 0){
+                    gameOver(data.winner);
+                }
+                if (myTurn){
+                    clearInterval(interval);
+                }
+            },
+
+            error: function (data) {
+                console.log(data.key);
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>
