@@ -16,7 +16,6 @@ public final class SecurityConstants {
     public static final String TOKEN_AUDIENCE = "secure-app";
     public static final long EXPIRATION_TIME = 864_000_000L;
 
-
     private SecurityConstants() {
         throw new IllegalStateException("Cannot create instance of static util class");
     }

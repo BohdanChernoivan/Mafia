@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wake_up</title>
+</head>
+<body>
+<form id="form">
+    <label>Id room:<br>
+        <input id="id" name="id" type="text" maxlength="50"></label><br>
+</form>
+<button onclick="day()">Day</button>
+<button onclick="wakeUpDay()">Wake up Day</button>
+<button onclick="votes()">Votes</button>
+<button onclick="night()">Night</button>
+<button onclick="wakeUpNight()">Wake up Night</button>
+<button onclick="restore()">Restore</button>
+<button onclick="view()">View all players</button>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    function day(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/game/day',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+     function wakeUpDay(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/game/day/wake_up',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function night(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/game/night',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function wakeUpNight(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/game/night/wake_up',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function restore(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/restore',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function votes(){
+        $.ajax({
+            type: 'GET',
+            url: '/game/votes',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function view(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/view/players',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

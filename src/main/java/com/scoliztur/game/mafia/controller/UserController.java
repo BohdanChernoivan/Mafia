@@ -1,8 +1,6 @@
 package com.scoliztur.game.mafia.controller;
 
 import com.scoliztur.game.mafia.entity.AppUser;
-import com.scoliztur.game.mafia.entity.RoleUser;
-import com.scoliztur.game.mafia.entity.repositories.RoleRepositories;
 import com.scoliztur.game.mafia.services.user.UserService;
 import com.scoliztur.game.mafia.validator.UserValidator;
 import org.springframework.http.ResponseEntity;
@@ -18,21 +16,22 @@ public class UserController {
 
     private final UserService userService;
     private final UserValidator userValidator;
-    private final RoleRepositories roleRepositories;
 
-    public UserController(UserService userService, RoleRepositories roleRepositories) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleRepositories = roleRepositories;
         this.userValidator = new UserValidator();
-        if(roleRepositories.findByName("USER") == null) {
-            RoleUser roleUser = new RoleUser();
-            roleUser.setName("USER");
-            roleRepositories.save(roleUser);
-        }
     }
 
     @PostMapping("/registration")
-    public ResponseEntity registration(@RequestBody AppUser appUser) {
+    public ResponseEntity registration(@RequestParam("login") String login,
+                                       @RequestParam("username") String username,
+                                       @RequestParam("password") String password) {
+
+        AppUser appUser = new AppUser();
+        appUser.setLogin(login);
+        appUser.setUsername(username);
+        appUser.setPassword(password);
+
         if(userValidator.validate(appUser)) {
             userService.register(appUser);
             return ResponseEntity.ok().body("Welcome " + appUser.getUsername());

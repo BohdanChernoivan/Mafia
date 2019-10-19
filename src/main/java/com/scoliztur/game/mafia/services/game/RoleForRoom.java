@@ -16,38 +16,38 @@ public class RoleForRoom {
 
     private final RoomRepositories roomRepositories;
     private final PlayerRoleBindingService playerFactory;
-    private final CompleteGame completeGame;
+    private final Game game;
 
 
-    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory, CompleteGame completeGame) {
+    public RoleForRoom(RoomRepositories roomRepositories, PlayerRoleBindingService playerFactory, Game game) {
         this.roomRepositories = roomRepositories;
         this.playerFactory = playerFactory;
-        this.completeGame = completeGame;
+        this.game = game;
     }
 
     public void addRole(String nameRole) {
 
         switch (nameRole) {
             case "Don":
-                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.DON.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(BlackPlayers.DON.getNameRole(), ""));
                 break;
             case "Mafia":
-                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.MAFIA.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(BlackPlayers.MAFIA.getNameRole(), ""));
                 break;
             case "Courtesan":
-                completeGame.listOfRole.add(playerFactory.createPlayer(BlackPlayers.COURTESAN.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(BlackPlayers.COURTESAN.getNameRole(), ""));
                 break;
             case "Sheriff":
-                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.SHERIFF.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(RedPlayers.SHERIFF.getNameRole(), ""));
                 break;
             case "Barman":
-                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.BARMAN.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(RedPlayers.BARMAN.getNameRole(), ""));
                 break;
             case "Doctor":
-                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.DOCTOR.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(RedPlayers.DOCTOR.getNameRole(), ""));
                 break;
             case "Civilian" :
-                completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
+                game.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + nameRole);
@@ -63,21 +63,21 @@ public class RoleForRoom {
 
         int minPlayersInRoom = room.getMinSizePlayers();
 
-        if(minPlayersInRoom <= completeGame.nameOfList.size()) {
-            if(completeGame.nameOfList.size() > completeGame.listOfRole.size()) {
-                int notEnoughPlayers = completeGame.nameOfList.size() - completeGame.listOfRole.size();
+        if(minPlayersInRoom <= game.nameOfList.size()) {
+            if(game.nameOfList.size() > game.listOfRole.size()) {
+                int notEnoughPlayers = game.nameOfList.size() - game.listOfRole.size();
                 for (int i = 0; i < notEnoughPlayers; i++) {
-                    completeGame.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
+                    game.listOfRole.add(playerFactory.createPlayer(RedPlayers.CIVILIAN.getNameRole(), ""));
                 }
             }
         } else {
             throw new RuntimeException("Not enough players");
         }
 
-        Collections.shuffle(completeGame.listOfRole);
+        Collections.shuffle(game.listOfRole);
 
-        for (Player player : completeGame.listOfRole) {
-            insertRndUsername(player, completeGame.nameOfList, cloneList);
+        for (Player player : game.listOfRole) {
+            insertRndUsername(player, game.nameOfList, cloneList);
         }
 
         return cloneList;

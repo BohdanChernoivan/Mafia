@@ -7,13 +7,10 @@ import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
 import com.scoliztur.game.mafia.security.roles.RoleStatus;
 import com.scoliztur.game.mafia.services.user.model.UserModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -34,7 +31,7 @@ public class UserService implements UserModel {
     @Override
     public AppUser register(AppUser appUser) {
         RoleUser roleUser = roleRepositories.findByName(RoleStatus.USER.name());
-        List<RoleUser> userRoleUsers = new ArrayList<>();
+        Set<RoleUser> userRoleUsers = new HashSet<>();
         userRoleUsers.add(roleUser);
 
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));

@@ -4,6 +4,7 @@ import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
+import com.scoliztur.game.mafia.services.game.Game;
 import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +22,13 @@ public class RoleController {
     private final RoleForRoom roleForRoom;
     private final RoomRepositories roomRepositories;
     private final UserRepositories userRepositories;
+    private final Game game;
 
-    public RoleController(RoleForRoom roleForRoom, RoomRepositories roomRepositories, UserRepositories userRepositories) {
+    public RoleController(RoleForRoom roleForRoom, RoomRepositories roomRepositories, UserRepositories userRepositories, Game game) {
         this.roleForRoom = roleForRoom;
         this.roomRepositories = roomRepositories;
         this.userRepositories = userRepositories;
+        this.game = game;
     }
 
     @PostMapping("/add_role")

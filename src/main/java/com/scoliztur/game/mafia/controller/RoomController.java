@@ -6,7 +6,8 @@ import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.entity.repositories.UserRepositories;
-import com.scoliztur.game.mafia.services.game.CompleteGame;
+import com.scoliztur.game.mafia.services.game.Game;
+import com.scoliztur.game.mafia.services.game.RoleForRoom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,14 @@ public class RoomController {
     private final RoomRepositories roomRepositories;
     private final UserRepositories userRepositories;
     private final RoomPlayerRepositories playerRepositories;
-    private final CompleteGame game;
+    private final RoleForRoom roleForRoom;
+    private final Game game;
 
-    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoomPlayerRepositories playerRepositories, CompleteGame game) {
+    public RoomController(RoomRepositories roomRepositories, UserRepositories userRepositories, RoomPlayerRepositories playerRepositories, RoleForRoom roleForRoom, Game game) {
         this.roomRepositories = roomRepositories;
         this.userRepositories = userRepositories;
         this.playerRepositories = playerRepositories;
+        this.roleForRoom = roleForRoom;
         this.game = game;
     }
 
@@ -62,7 +65,6 @@ public class RoomController {
             appUser.setRoomUser(room);
 
             game.nameOfList.add(appUser.getUsername());
-            roomRepositories.save(room);
             userRepositories.save(appUser);
 
             return ResponseEntity.ok().body("Create room. Name -> " + nameRoom);
@@ -77,28 +79,30 @@ public class RoomController {
 
         AppUser appUser = userRepositories.findUserByUsername(principal.getName());
 
-        if(!roomRepositories.existsById(roomId)) {
-            return ResponseEntity.badRequest().body("Such a room does not exist");
-        } else if(!userRepositories.existsById(appUser.getId())) {
-            return ResponseEntity.badRequest().body("Such an appUser does not exist. AppUser does not exist");
+        if(appUser.getRoomUser() == null) {
+
+            if (!roomRepositories.existsById(roomId)) {
+                return ResponseEntity.badRequest().body("Such a room does not exist");
+            } else if (!userRepositories.existsById(appUser.getId())) {
+                return ResponseEntity.badRequest().body("Such an appUser does not exist. AppUser does not exist");
+            }
+
+            Room room = roomRepositories.getOne(roomId);
+
+            if (room.getMaxSizePlayers() > room.getPlayersNow()) {
+                appUser.setRoomUser(room);
+                room.setPlayersNow(room.getPlayersNow() + 1);
+
+                game.nameOfList.add(appUser.getUsername());
+                userRepositories.save(appUser);
+
+                return ResponseEntity.ok().body(userRepositories.getOne(appUser.getId()).getUsername()
+                        + " join in room -> " + roomRepositories.getOne(roomId).getName());
+            } else {
+                return ResponseEntity.badRequest().body("Room is full");
+            }
         }
-
-        Room room = roomRepositories.getOne(roomId);
-
-        if(room.getMaxSizePlayers() > room.getPlayersNow()) {
-            appUser.setRoomUser(room);
-            room.setPlayersNow(room.getPlayersNow() + 1);
-
-            game.nameOfList.add(appUser.getUsername());
-            userRepositories.save(appUser);
-            roomRepositories.save(room);
-
-            return ResponseEntity.ok().body(userRepositories.getOne(appUser.getId()).getUsername()
-                    + " join in room -> " + roomRepositories.getOne(roomId).getName());
-
-        } {
-            return ResponseEntity.badRequest().body("Room is full");
-        }
+        return ResponseEntity.badRequest().body("You in other room");
     }
 
     @PostMapping("/restore")
@@ -124,8 +128,15 @@ public class RoomController {
         if (room.getCreatorId().equals(appUser.getId())) {
             if (room.getPlayersNow() >= game.listOfRole.size()
                     || room.getPlayersNow() >= room.getMinSizePlayers()) {
-                game.newPlayerList();
-                game.listOfRole = new ArrayList<>();
+
+                game.playerList = roleForRoom.randomDistributionOfRole(roomId);
+
+                List<RoomPlayer> list = game.saveRoomPlayer(room);
+
+                for (RoomPlayer roomPlayer : list) {
+                    playerRepositories.save(roomPlayer);
+                }
+
                 return ResponseEntity.ok().body("Start game in room -> " + room.getName());
             } else {
                 return ResponseEntity.badRequest().body("Roles more than players");
@@ -133,5 +144,20 @@ public class RoomController {
         } else {
             return ResponseEntity.badRequest().body("You not creator this room");
         }
+    }
+
+    @PostMapping("/view/players")
+    public ResponseEntity<List<String>> start(@RequestParam("id") UUID roomId) {
+
+        Room room = roomRepositories.getOne(roomId);
+
+        List<String> namePlayers = new ArrayList<>();
+        List<RoomPlayer> roomPlayerList = playerRepositories.findAllByRoomUser(room);
+
+        for (RoomPlayer roomPlayer : roomPlayerList) {
+            namePlayers.add(roomPlayer.getNickname());
+        }
+
+        return ResponseEntity.ok(namePlayers);
     }
 }

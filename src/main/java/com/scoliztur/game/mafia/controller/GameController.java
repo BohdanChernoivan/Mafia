@@ -5,47 +5,30 @@ import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
-import com.scoliztur.game.mafia.services.game.CompleteGame;
-import com.scoliztur.game.mafia.services.game.RoleForRoom;
+import com.scoliztur.game.mafia.services.game.Game;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 
 @RestController
 @RequestMapping("/game")
 public class GameController {
 
-    private final CompleteGame game;
-    private final RoleForRoom roleForRoom;
+    private final Game game;
     private final RoomRepositories roomRepositories;
     private final RoomPlayerRepositories playerRepositories;
 
 
-    public GameController(CompleteGame game, RoleForRoom roleForRoom,
+    public GameController(Game game,
                           RoomRepositories roomRepositories,
                           RoomPlayerRepositories playerRepositories) {
         this.game = game;
-        this.roleForRoom = roleForRoom;
         this.roomRepositories = roomRepositories;
         this.playerRepositories = playerRepositories;
     }
 
-    @PostMapping("/shuffle")
-    public ResponseEntity shuffleRole(@RequestParam("id") UUID roomId) {
-
-        game.playerList = roleForRoom.randomDistributionOfRole(roomId);
-
-        Room room = roomRepositories.getOne(roomId);
-
-        List<RoomPlayer> list = game.saveRoomPlayer(room);
-
-        for (RoomPlayer roomPlayer : list) {
-            playerRepositories.save(roomPlayer);
-        }
-
-        return ResponseEntity.ok().body("Done");
-    }
 
     @PostMapping("/day")
     public ResponseEntity doDay(@RequestParam("id") UUID roomId) {
@@ -68,7 +51,13 @@ public class GameController {
 
         Room room = roomRepositories.getOne(roomId);
 
-        if (room.isDay()) {
+        if(!game.isCivilianInRoom()) {
+            game.cleanRoom(room);
+            return ResponseEntity.ok().body("Mafia win");
+        } else if (!game.isMafiaInRoom()) {
+            game.cleanRoom(room);
+            return ResponseEntity.ok().body("Civilian win");
+        } else if (room.isDay()) {
             game.newListForCivilian();
 
             List<RoomPlayer> list = game.saveRoomPlayer(room);
@@ -84,21 +73,23 @@ public class GameController {
     }
 
     @PostMapping("/pick")
-    public ResponseEntity pick(@RequestParam("player") int numberPlayer) {
+    public ResponseEntity pick(@RequestParam("player") int numberPlayer,
+                               Principal principal) {
 
-        return ResponseEntity.ok(game.pickPlayerSelectionOrder(numberPlayer));
+        return ResponseEntity.ok(game.pickPlayerSelectionOrder(principal.getName() ,numberPlayer));
     }
 
     @GetMapping("/votes")
-    public List<String> votes() {
+    public ResponseEntity<List<String>> votes() {
         return viewListCivilian();
     }
 
 
     @PostMapping("/vote")
-    public ResponseEntity vote(@RequestParam("this_player") int thisNumberPlayer,
-                               @RequestParam("player") int numberPlayer) {
-         return ResponseEntity.ok(game.vote(thisNumberPlayer, numberPlayer));
+    public ResponseEntity vote(@RequestParam("player") int numberPlayer,
+                               Principal principal) {
+
+        return ResponseEntity.ok(game.vote(principal.getName(), numberPlayer));
     }
 
     @PostMapping("/night")
@@ -121,7 +112,13 @@ public class GameController {
 
         Room room = roomRepositories.getOne(roomId);
 
-        if(!room.isDay()) {
+        if(!game.isCivilianInRoom()) {
+            game.cleanRoom(room);
+            return ResponseEntity.ok().body("Mafia win");
+        } else if (!game.isMafiaInRoom()) {
+            game.cleanRoom(room);
+            return ResponseEntity.ok().body("Civilian win");
+        } else if(!room.isDay()) {
             game.newListForMafia();
 
             List<RoomPlayer> list = game.saveRoomPlayer(room);
@@ -136,26 +133,20 @@ public class GameController {
         }
     }
 
-    @PostMapping("/findSheriff")
-    public ResponseEntity actionPlayer(@RequestParam("this_player") int thisNumberPlayer,
-                                       @RequestParam("player") int numberPlayer) {
-        return ResponseEntity.ok().body(game.actionPlayerNight(thisNumberPlayer, numberPlayer));
+    @PostMapping("/action")
+    public ResponseEntity actionPlayer(@RequestParam("player") int numberPlayer,
+                                       Principal principal) {
+        return ResponseEntity.ok().body(game.actionPlayer(principal.getName(), numberPlayer));
     }
 
-
-    @GetMapping("/view/players")
-    public List<String> viewPlayers() {
-        return game.viewOrderPlayerList(game.playerList.getPlayerList());
-    }
-
-    @GetMapping("/view/vote_selection_order/mafia")
-    public List<String> viewListMafia() {
-        return game.viewOrderPlayerList(game.listForMafia.getPlayerList());
+    @GetMapping("/view_role")
+    public ResponseEntity viewOwnRole(Principal principal) {
+        return ResponseEntity.ok().body(game.findPlayerInList(principal.getName()).toString());
     }
 
     @GetMapping("/view/vote_selection_order/civilian")
-    public List<String> viewListCivilian() {
-        return game.viewOrderPlayerList(game.listForCivilian.getPlayerList());
+    public ResponseEntity<List<String>> viewListCivilian() {
+        return ResponseEntity.ok(game.viewOrderPlayerList(game.listForCivilian.getPlayerList()));
     }
 
 }

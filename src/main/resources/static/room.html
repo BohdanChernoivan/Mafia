@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Room</title>
+</head>
+<body>
+<form id="form">
+    <label>Name room:<br>
+        <input id="name" name="name" type="text" maxlength="30"></label><br>
+    <label>Max size in room:<br>
+        <input id="max" name="max" type="number" maxlength="30"></label><br>
+    <label>Min size in room:<br>
+        <input id="min" name="min" type="number" maxlength="30"></label><br>
+    <label>UUID room:<br>
+        <input id="id" name="id" type="text" maxlength="50"></label><br>
+    <label>Add role:<br>
+        <input id="role" name="role" type="text" maxlength="30"></label><br>
+</form>
+<button onclick="create()">Create room</button>
+<button onclick="join()">Join room</button>
+<button onclick="addRole()">Add role</button>
+<button onclick="window.location.href = '/game'">Continue game</button>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    function create(){
+        var name = document.getElementById("name").value;
+        var max = document.getElementById("max").value;
+        var min = document.getElementById("min").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/create',
+            headers: {
+            'Authorization': sessionStorage.getItem('token')},
+            data: "name=" + name + "&max=" + max + "&min=" + min,
+            success: function (data) {
+                console.log(data);
+                window.location.href = '/game';
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function join(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/join',
+            headers: {
+            'Authorization': sessionStorage.getItem('token')},
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+                window.location.href = '/game';
+
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function addRole(){
+        var id = document.getElementById("id").value;
+        var role = document.getElementById("role").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/add_role',
+            headers: {
+            'Authorization': sessionStorage.getItem('token')},
+            data: "id=" + id + "&role=" + role,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
