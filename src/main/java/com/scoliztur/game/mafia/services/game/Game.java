@@ -1,5 +1,6 @@
 package com.scoliztur.game.mafia.services.game;
 
+import com.scoliztur.game.mafia.entity.AppUser;
 import com.scoliztur.game.mafia.entity.Room;
 import com.scoliztur.game.mafia.entity.RoomPlayer;
 import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
@@ -80,7 +81,7 @@ public class Game implements CompleteGame {
         List<String> stringList = new ArrayList<>();
 
         for (int i = 0; i < playerList.size(); i++) {
-            stringList.add("Player [" + i + "], name " + playerList.get(i).toString());
+            stringList.add("Player [" + i + "], name " + playerList.get(i).getName());
         }
 
         return stringList;
@@ -116,10 +117,10 @@ public class Game implements CompleteGame {
                     return "Player does not pick anyone";
                 }
             } else {
-                return "Such player none in the room";
+                return "Now other player picks";
             }
         } else {
-            return "Such player none";
+            return "Such player none in the room";
         }
     }
 
@@ -250,5 +251,20 @@ public class Game implements CompleteGame {
             }
         }
         return thisPlayer;
+    }
+
+    public void cleanRoom(Room room) {
+        List<RoomPlayer> roomPlayerList = roomPlayerRepositories.findAllByRoomUser(room);
+
+        for (RoomPlayer player : roomPlayerList) {
+
+            roomPlayerRepositories.delete(player);
+        }
+
+        for (AppUser user : room.getAppUsers()) {
+            AppUser appUser = userRepositories.findUserByUsername(user.getUsername());
+            appUser.setRoomUser(null);
+            userRepositories.save(appUser);
+        }
     }
 }

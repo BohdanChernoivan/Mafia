@@ -145,4 +145,19 @@ public class RoomController {
             return ResponseEntity.badRequest().body("You not creator this room");
         }
     }
+
+    @PostMapping("/view/players")
+    public ResponseEntity<List<String>> start(@RequestParam("id") UUID roomId) {
+
+        Room room = roomRepositories.getOne(roomId);
+
+        List<String> namePlayers = new ArrayList<>();
+        List<RoomPlayer> roomPlayerList = playerRepositories.findAllByRoomUser(room);
+
+        for (RoomPlayer roomPlayer : roomPlayerList) {
+            namePlayers.add(roomPlayer.getNickname());
+        }
+
+        return ResponseEntity.ok(namePlayers);
+    }
 }

@@ -2,30 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Game</title>
+    <title>Wake_up</title>
 </head>
 <body>
 <form id="form">
     <label>Id room:<br>
         <input id="id" name="id" type="text" maxlength="50"></label><br>
-    <label>Player:<br>
-        <input id="player" name="player" type="number" maxlength="30"></label><br>
 </form>
-<button onclick="pick()">pick</button>
-<button onclick="vote()">vote</button>
-<button onclick="action()">action</button>
-<button onclick="start()">start</button>
-<button onclick="viewRole()">View own role</button>
+<button onclick="day()">Day</button>
+<button onclick="wakeUpDay()">Wake up Day</button>
+<button onclick="votes()">Votes</button>
+<button onclick="night()">Night</button>
+<button onclick="wakeUpNight()">Wake up Night</button>
+<button onclick="restore()">Restore</button>
+<button onclick="view()">View all players</button>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 <script>
-
- function start(){
+    function day(){
         var id = document.getElementById("id").value;
         $.ajax({
             type: 'POST',
-            url: '/room/start',
-            headers: {
-            'Authorization': sessionStorage.getItem('token')},
+            url: '/game/day',
             data: "id=" + id,
             success: function (data) {
                 console.log(data);
@@ -36,15 +33,12 @@
         });
     }
 
-    function pick(){
+     function wakeUpDay(){
         var id = document.getElementById("id").value;
-        var player = document.getElementById("player").value;
         $.ajax({
             type: 'POST',
-            url: '/game/pick',
-            headers: {
-            'Authorization': sessionStorage.getItem('token')},
-            data: "id=" + id + "&player=" + player,
+            url: '/game/day/wake_up',
+            data: "id=" + id,
             success: function (data) {
                 console.log(data);
             },
@@ -54,15 +48,12 @@
         });
     }
 
-    function vote(){
+    function night(){
         var id = document.getElementById("id").value;
-        var player = document.getElementById("player").value;
         $.ajax({
             type: 'POST',
-            url: '/game/vote',
-            headers: {
-            'Authorization': sessionStorage.getItem('token')},
-            data: "id=" + id + "&player=" + player,
+            url: '/game/night',
+            data: "id=" + id,
             success: function (data) {
                 console.log(data);
             },
@@ -72,15 +63,12 @@
         });
     }
 
-    function action(){
+    function wakeUpNight(){
         var id = document.getElementById("id").value;
-        var player = document.getElementById("player").value;
         $.ajax({
             type: 'POST',
-            url: '/game/action',
-            headers: {
-            'Authorization': sessionStorage.getItem('token')},
-            data: "id=" + id + "&player=" + player,
+            url: '/game/night/wake_up',
+            data: "id=" + id,
             success: function (data) {
                 console.log(data);
             },
@@ -90,12 +78,40 @@
         });
     }
 
-    function viewRole(){
+    function restore(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/restore',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function votes(){
         $.ajax({
             type: 'GET',
-            url: '/game/view_role',
-            headers: {
-            'Authorization': sessionStorage.getItem('token')},
+            url: '/game/votes',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function view(){
+        var id = document.getElementById("id").value;
+        $.ajax({
+            type: 'POST',
+            url: '/room/view/players',
+            data: "id=" + id,
             success: function (data) {
                 console.log(data);
             },

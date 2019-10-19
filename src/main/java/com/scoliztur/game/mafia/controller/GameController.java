@@ -52,10 +52,10 @@ public class GameController {
         Room room = roomRepositories.getOne(roomId);
 
         if(!game.isCivilianInRoom()) {
-            roomRepositories.delete(room);
+            game.cleanRoom(room);
             return ResponseEntity.ok().body("Mafia win");
         } else if (!game.isMafiaInRoom()) {
-            roomRepositories.delete(room);
+            game.cleanRoom(room);
             return ResponseEntity.ok().body("Civilian win");
         } else if (room.isDay()) {
             game.newListForCivilian();
@@ -113,10 +113,10 @@ public class GameController {
         Room room = roomRepositories.getOne(roomId);
 
         if(!game.isCivilianInRoom()) {
-            roomRepositories.delete(room);
+            game.cleanRoom(room);
             return ResponseEntity.ok().body("Mafia win");
         } else if (!game.isMafiaInRoom()) {
-            roomRepositories.delete(room);
+            game.cleanRoom(room);
             return ResponseEntity.ok().body("Civilian win");
         } else if(!room.isDay()) {
             game.newListForMafia();

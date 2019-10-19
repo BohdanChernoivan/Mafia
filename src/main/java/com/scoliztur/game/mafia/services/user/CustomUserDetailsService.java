@@ -20,14 +20,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String name) {
-        AppUser appUser = userRepositories.findUserByLogin(name);
+    public UserDetails loadUserByUsername(String login) {
+        AppUser appUser = userRepositories.findUserByLogin(login);
 
         if(appUser == null) {
-            throw new UsernameNotFoundException(name);
+            throw new UsernameNotFoundException(login);
         }
 
-        log.info("In loadUserByUsername - appUser: {} loaded by username: {}", appUser, name);
+        log.info("In loadUserByUsername - appUser: {} loaded by username: {}", appUser, login);
 
         return new UserPrincipal(appUser);
     }

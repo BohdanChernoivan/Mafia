@@ -25,4 +25,9 @@ public class TemplateController {
     public String game() {
         return "forward:/game.html";
     }
+
+    @GetMapping("/wake_up")
+    public String wake_up() {
+        return "forward:/wake_up.html";
+    }
 }
