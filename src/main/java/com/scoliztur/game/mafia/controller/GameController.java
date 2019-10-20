@@ -7,6 +7,7 @@ import com.scoliztur.game.mafia.entity.repositories.RoomPlayerRepositories;
 import com.scoliztur.game.mafia.entity.repositories.RoomRepositories;
 import com.scoliztur.game.mafia.services.game.Game;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -46,6 +47,7 @@ public class GameController {
         }
     }
 
+    @Transactional
     @PostMapping("/day/wake_up")
     public ResponseEntity wakeUpDay(@RequestParam("id") UUID roomId) {
 
@@ -107,6 +109,7 @@ public class GameController {
         }
     }
 
+    @Transactional
     @PostMapping("/night/wake_up")
     public ResponseEntity wakeUpNight(@RequestParam("id") UUID roomId) {
 
