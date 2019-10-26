@@ -37,6 +37,6 @@ class DoctorTest {
 
     @Test
     void getRoleName() {
-        assertEquals(doctor.toString(), RedPlayers.DOCTOR.getNameRole());
+        assertEquals(doctor.toString(), "Doctor");
     }
 }

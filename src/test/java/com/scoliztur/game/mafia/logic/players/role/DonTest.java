@@ -42,6 +42,6 @@ class DonTest {
 
     @Test
     void getRoleName() {
-        assertEquals(don.toString(), BlackPlayers.DON.getNameRole());
+        assertEquals(don.toString(), "Don");
     }
 }

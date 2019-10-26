@@ -43,6 +43,6 @@ class BarmanTest {
 
     @Test
     void getRoleName() {
-        assertEquals(barman.toString(), RedPlayers.BARMAN.getNameRole());
+        assertEquals(barman.toString(), "Barman");
     }
 }

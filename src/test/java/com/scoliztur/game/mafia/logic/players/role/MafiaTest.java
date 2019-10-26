@@ -45,6 +45,6 @@ class MafiaTest {
 
     @Test
     void getRoleName() {
-        assertEquals(mafia1.toString(), BlackPlayers.MAFIA.getNameRole());
+        assertEquals(mafia1.toString(), "Mafia");
     }
 }

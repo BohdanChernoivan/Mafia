@@ -24,7 +24,7 @@ class CourtesanTest {
 
     @Test
     void getRoleName() {
-        assertEquals(courtesan.toString(), BlackPlayers.COURTESAN.getNameRole());
+        assertEquals(courtesan.toString(), "Courtesan");
     }
 
     @Test

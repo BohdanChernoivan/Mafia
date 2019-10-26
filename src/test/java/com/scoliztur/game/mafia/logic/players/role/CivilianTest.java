@@ -41,6 +41,6 @@ class CivilianTest {
 
     @Test
     void getRoleName() {
-        assertEquals(civilian.toString(), RedPlayers.CIVILIAN.getNameRole());
+        assertEquals(civilian.toString(), "Civilian");
     }
 }
