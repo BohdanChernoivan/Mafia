@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Room</title>
+    <title>Mafia</title>
+    <link rel="stylesheet" type="text/css" href="style/registration.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="icon" href="img/hat.png" type="image/icon type">
 </head>
 <body>
 <form id="form">
@@ -20,6 +23,7 @@
 <button onclick="create()">Create room</button>
 <button onclick="join()">Join room</button>
 <button onclick="addRole()">Add role</button>
+<button onclick="viewRooms()">View rooms</button>
 <button onclick="window.location.href = '/game'">Continue game</button>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 <script>
@@ -57,6 +61,16 @@
 
             },
             error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function viewRooms(){
+        $.ajax({
+            type: 'GET',
+            url: '/room/view/all_rooms',
+            success: function (data) {
                 console.log(data);
             }
         });

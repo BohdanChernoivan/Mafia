@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Game</title>
+    <title>Mafia game</title>
+    <link rel="stylesheet" type="text/css" href="style/registration.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="icon" href="img/hat.png" type="image/icon type">
 </head>
 <body>
 <form id="form">
@@ -18,8 +21,7 @@
 <button onclick="viewRole()">View own role</button>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 <script>
-
- function start(){
+    function start(){
         var id = document.getElementById("id").value;
         $.ajax({
             type: 'POST',
@@ -104,6 +106,10 @@
             }
         });
     }
+
+
+
+
 </script>
 </body>
 </html>
