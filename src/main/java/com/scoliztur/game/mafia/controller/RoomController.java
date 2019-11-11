@@ -160,4 +160,18 @@ public class RoomController {
 
         return ResponseEntity.ok(namePlayers);
     }
+
+    @GetMapping("/view/all_rooms")
+    public ResponseEntity<Map<UUID, String>> viewRooms() {
+
+        List<Room> result = roomRepositories.findAll();
+        Map<UUID, String> listUUID = new HashMap<>();
+
+        for (Room room : result) {
+            listUUID.put(room.getId(), room.getName());
+        }
+
+        return ResponseEntity.ok().body(listUUID);
+    }
+
 }

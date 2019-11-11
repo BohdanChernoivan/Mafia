@@ -27,26 +27,33 @@ public class UserController {
                                        @RequestParam("username") String username,
                                        @RequestParam("password") String password) {
 
-        AppUser appUser = new AppUser();
-        appUser.setLogin(login);
-        appUser.setUsername(username);
-        appUser.setPassword(password);
+        if(userValidator.validateLogin(login)) {
 
-        if(userValidator.validate(appUser)) {
+            return ResponseEntity.badRequest().body("Login must be between 4 and 16 characters!");
+
+        } else if(userValidator.validateUsername(username)) {
+
+            return ResponseEntity.badRequest().body("Username must be between 3 and 12 characters!");
+
+        } else if(userValidator.validatePassword(password)) {
+
+            return ResponseEntity.badRequest().body("Password must be over 5 characters!");
+
+        } else {
+
+            AppUser appUser = new AppUser();
+            appUser.setLogin(login);
+            appUser.setUsername(username);
+            appUser.setPassword(password);
+
             userService.register(appUser);
             return ResponseEntity.ok().body("Welcome " + appUser.getUsername());
-        } else {
-            return ResponseEntity.badRequest()
-                    .body("Registration is not valid:" + "\n"
-                    + "Login must be between 4 and 16 characters;" + "\n"
-                    + "Username must be between 3 and 12 characters;" + "\n"
-                    + "Password must be over 5 characters.");
         }
     }
 
     @GetMapping("/view_all")
-    public List<AppUser> getAll() {
-        return userService.getAll();
+    public ResponseEntity<List<AppUser>> getAll() {
+        return ResponseEntity.ok().body(userService.getAll());
     }
 
     @PostMapping("/find_by_username")
